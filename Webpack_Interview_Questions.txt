@@ -1,0 +1,181 @@
+### 🔹 Webpack Basics
+
+**1. What is Webpack and why do we use it?**
+Webpack is a powerful module bundler for JavaScript applications. It takes modules with dependencies and generates static assets representing those modules. It helps in bundling JavaScript, CSS, images, and other assets, making the development and deployment process efficient.
+
+**2. What are the core concepts of Webpack?**
+
+* **Entry**: The starting point of the application where Webpack starts bundling.
+* **Output**: The location and naming of the bundled files.
+* **Loaders**: Transforms files into modules that Webpack can understand (e.g., Babel for JS, CSS loaders).
+* **Plugins**: Perform a wider range of tasks like bundle optimization, asset management, and environment variable injection.
+
+**3. How does Webpack differ from other bundlers like Parcel, Rollup, or Vite?**
+
+* **Parcel**: Zero-config, faster for small projects, but less customizable.
+* **Rollup**: Optimized for bundling libraries, supports tree shaking well.
+* **Vite**: Uses native ES modules and is faster for development, but Webpack is more battle-tested for complex projects.
+
+**4. What is the difference between webpack.config.js and webpack.dev.js / webpack.prod.js?**
+
+* `webpack.config.js` is a common config.
+* `webpack.dev.js` is used for development (source maps, HMR).
+* `webpack.prod.js` is for production (minification, optimization).
+  They can be merged using tools like `webpack-merge`.
+
+**5. What is Tree Shaking in Webpack?**
+Tree shaking is the process of removing unused code from the final bundle, enabled via ES6 module syntax (`import/export`) and `mode: 'production'` in Webpack.
+
+---
+
+### 🔹 Configuration & Usage
+
+**6. How do you configure Webpack for a React project?**
+
+* Install dependencies: `webpack`, `webpack-cli`, `babel-loader`, `@babel/preset-react`, `react`, etc.
+* Create a `webpack.config.js` with `entry`, `output`, `module.rules` for `.jsx`, CSS, images, and set up plugins like `HtmlWebpackPlugin`.
+
+**7. What are entry and output in Webpack?**
+
+* **Entry**: Specifies the entry point of your application. Example: `entry: './src/index.js'`
+* **Output**: Specifies where to emit the bundled file. Example: `output: { filename: 'bundle.js', path: __dirname + '/dist' }`
+
+**8. What are Loaders in Webpack? Why do we need them?**
+Loaders let Webpack process other types of files (e.g., JSX, SCSS). They transform these files into valid modules.
+
+* `babel-loader`: Transpiles ES6+/JSX to ES5.
+* `css-loader`: Allows importing CSS files.
+* `style-loader`: Injects CSS into the DOM.
+
+**9. What are Plugins in Webpack? Name some commonly used ones.**
+Plugins extend Webpack's capabilities.
+
+* `HtmlWebpackPlugin`: Injects the bundle into `index.html`.
+* `MiniCssExtractPlugin`: Extracts CSS into separate files.
+* `DefinePlugin`: Defines environment variables at build time.
+
+**10. How do you add support for CSS and images in Webpack?**
+
+* For CSS: Use `style-loader` and `css-loader`.
+* For images: Use `file-loader` or `asset/resource` in Webpack 5.
+
+**11. How can you configure Webpack to handle .js, .jsx, and .ts files?**
+Use `babel-loader` with appropriate presets:
+
+```js
+rules: [
+  { test: /\.(js|jsx|ts)$/, use: 'babel-loader', exclude: /node_modules/ }
+]
+```
+
+---
+
+### 🔹 Performance Optimization
+
+**12. What are some ways to improve Webpack build performance?**
+
+* Use caching (`cache: true`)
+* Exclude `node_modules` in loaders
+* Enable parallelism with `thread-loader`
+* Use `mode: 'production'` for minification
+
+**13. What is Code Splitting and how is it achieved in Webpack?**
+Code splitting breaks the bundle into smaller chunks. It can be done using:
+
+* Dynamic `import()`
+* `SplitChunksPlugin`
+
+**14. What is Lazy Loading and how is it configured with Webpack?**
+Lazy loading loads modules only when needed. Use `React.lazy` and dynamic `import()`.
+
+**15. How do you set up source maps in Webpack?**
+Use the `devtool` option:
+
+```js
+devtool: 'source-map' // for production
+// or
+'deval-source-map' // for development
+```
+
+---
+
+### 🔹 Advanced Questions
+
+**16. What is the difference between devServer and devtool in Webpack?**
+
+* `devServer`: Provides live reloading and HMR.
+* `devtool`: Generates source maps for debugging.
+
+**17. What is Hot Module Replacement (HMR)? How is it configured?**
+HMR updates modules in real-time without refreshing the page.
+
+* Enabled via `devServer: { hot: true }`
+* Requires `webpack.HotModuleReplacementPlugin`
+
+**18. What is the use of DefinePlugin in Webpack?**
+Used to create global constants. Example:
+
+```js
+new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('production') })
+```
+
+**19. What are content hashes in Webpack and why are they useful?**
+Content hashes help in cache busting. When file content changes, the filename changes too.
+
+```js
+output: {
+  filename: '[name].[contenthash].js'
+}
+```
+
+**20. What is the role of Babel with Webpack?**
+Babel transpiles modern JavaScript/JSX into browser-compatible JavaScript using `babel-loader`.
+
+**21. How do you configure Webpack for production and development environments separately?**
+
+* Create `webpack.dev.js` and `webpack.prod.js`
+* Use `webpack-merge` to merge common configs
+* Set different `mode`, `devtool`, and plugins for each
+
+---
+
+### 🔹 Miscellaneous / Scenario-based
+
+**22. Have you ever created a custom Webpack plugin or loader?**
+Yes. A custom plugin can be created using hooks like `compiler.hooks.emit.tapAsync`. A custom loader transforms file contents using `module.exports = function(source) {}`.
+
+**23. How do you debug Webpack build issues?**
+
+* Enable source maps
+* Use verbose logging
+* Use `stats` configuration
+* Analyze bundle with `webpack-bundle-analyzer`
+
+**24. What problems did you face while using Webpack and how did you solve them?**
+Examples:
+
+* Loader conflicts → resolved by checking loader order.
+* Long build times → optimized with caching and `thread-loader`.
+
+**25. If your bundle size is too large, how would you investigate and reduce it?**
+
+* Use `webpack-bundle-analyzer`
+* Lazy load non-critical modules
+* Remove unused dependencies (Tree shaking)
+* Use `SplitChunksPlugin`
+
+**26. Can you explain the difference between file-loader and url-loader?**
+
+* `file-loader`: Emits a separate file and returns its URL.
+* `url-loader`: Converts files to base64 URIs if under a size limit.
+
+**27. How do you handle environment variables in Webpack?**
+
+* Use `dotenv` + `DefinePlugin`
+
+```js
+require('dotenv').config();
+new webpack.DefinePlugin({
+  'process.env.API_URL': JSON.stringify(process.env.API_URL)
+})
+```
