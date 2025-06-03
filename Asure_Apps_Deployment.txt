@@ -1,0 +1,207 @@
+✅ What is Azure App Service?
+Azure App Service is a Platform as a Service (PaaS) offered by Microsoft Azure that allows you to host web apps, REST APIs, and mobile backends in a fully managed environment. It supports multiple languages and frameworks, including:
+
+React (frontend via static deployment or Node.js server)
+
+Node.js, .NET, Python, Java, PHP
+
+Docker containers
+
+🚀 How to Use Azure App Service to Deploy a React + Node.js App
+Let's break this down into 3 parts:
+
+📁 1. Project Structure (Full-Stack App)
+Example:
+
+pgsql
+Copy
+Edit
+my-app/
+├── client/        ← React frontend
+│   └── build/     ← Static files after `npm run build`
+├── server/        ← Node.js/Express backend
+│   └── server.js
+├── package.json   ← For backend
+☁️ 2. Steps to Deploy on Azure App Service (Linux)
+🔹 Option A: Deploy as a single combined app (frontend + backend in one Node.js app)
+Step-by-step:
+✅ Step 1: Prepare Production Build for React
+bash
+Copy
+Edit
+cd client
+npm install
+npm run build
+This creates a build/ folder with static HTML, CSS, and JS.
+
+✅ Step 2: Serve React via Express (in backend)
+In server/server.js:
+
+js
+Copy
+Edit
+const express = require("express");
+const path = require("path");
+const app = express();
+
+app.use(express.static(path.join(__dirname, "../client/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
+
+app.listen(process.env.PORT || 3000, () => {
+  console.log("Server is running...");
+});
+✅ Step 3: Zip the project
+Zip everything including:
+
+client/build
+
+server/
+
+package.json
+
+✅ Step 4: Create Azure App Service & Deploy
+bash
+Copy
+Edit
+# Login
+az login
+
+# Create a Resource Group (if not created)
+az group create --name myResourceGroup --location "East US"
+
+# Create App Service Plan
+az appservice plan create --name myPlan --resource-group myResourceGroup --sku B1 --is-linux
+
+# Create Web App
+az webapp create --resource-group myResourceGroup \
+  --plan myPlan \
+  --name myFullStackApp \
+  --runtime "NODE|18-lts"
+
+# Deploy using zip
+az webapp deploy --resource-group myResourceGroup \
+  --name myFullStackApp \
+  --src-path app.zip \
+  --type zip
+Use the URL provided after deployment, e.g., https://myFullStackApp.azurewebsites.net
+
+🔹 Option B: Deploy Frontend (React) & Backend (Node) Separately
+React: Deploy to Azure Static Web Apps or as static files in Blob Storage
+
+Node: Deploy to Azure App Service
+
+⚙️ Configuration Notes
+🔐 Set environment variables:
+bash
+Copy
+Edit
+az webapp config appsettings set \
+  --name myFullStackApp \
+  --resource-group myResourceGroup \
+  --settings NODE_ENV=production CUSTOM_KEY=value
+🔄 Setup CI/CD (Optional):
+You can integrate GitHub Actions to auto-deploy on every commit.
+
+📊 Summary Table
+Part	Deployment Method
+React	Built & served by Express or static site
+Node.js	Azure App Service (Linux, Node runtime)
+Combined	Zip deploy full app with Express backend
+CI/CD	Use GitHub Actions / Azure DevOps
+
+
+
+
+
+Here's a complete example of a GitHub Actions workflow file to deploy a React + Node.js full-stack app to Azure App Service (Linux) using zip deployment.
+
+📦 Prerequisites:
+Azure App Service created (Linux + Node.js runtime).
+
+You’ve set up your backend to serve the React build folder.
+
+React build folder is placed inside your client folder and your Node server is at the root or in a server folder.
+
+You have a .env or environment config already handled on Azure.
+
+🧾 Sample GitHub Actions Workflow (.github/workflows/azure-deploy.yml)
+yaml
+Copy
+Edit
+name: Deploy Node.js + React App to Azure
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Client Dependencies & Build
+      working-directory: ./client
+      run: |
+        npm install
+        npm run build
+
+    - name: Install Server Dependencies
+      working-directory: ./
+      run: |
+        npm install
+
+    - name: Zip Build Folder
+      run: |
+        zip -r app.zip . -x ".git/*"
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: <YOUR_APP_SERVICE_NAME>       # e.g., my-fullstack-app
+        slot-name: production
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: app.zip
+🔐 How to Generate and Add AZURE_WEBAPP_PUBLISH_PROFILE
+Go to your App Service in the Azure Portal.
+
+In the left menu, click "Deployment Center" → "Manage Publish Profile".
+
+Click "Download publish profile".
+
+Open the file and copy its contents.
+
+Go to your GitHub repo → Settings → Secrets → Actions → New Repository Secret:
+
+Name: AZURE_WEBAPP_PUBLISH_PROFILE
+
+Value: Paste the full XML content.
+
+💡 Folder Structure Reminder
+Make sure your folder looks like this for the workflow to work:
+
+pgsql
+Copy
+Edit
+/
+├── client/
+│   ├── package.json
+│   └── build/
+├── server.js (or server/)
+├── package.json (backend)
+├── .github/workflows/azure-deploy.yml
+✅ After Successful Deployment
+Visit your deployed app at:
+https://<your-app-service-name>.azurewebsites.net
+
