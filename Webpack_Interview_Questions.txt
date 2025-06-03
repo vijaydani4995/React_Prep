@@ -179,3 +179,148 @@ new webpack.DefinePlugin({
   'process.env.API_URL': JSON.stringify(process.env.API_URL)
 })
 ```
+
+
+✅ Step-by-Step Webpack Setup in a React Project
+🔹 Step 1: Create Project Directory
+bash
+Copy
+Edit
+mkdir my-react-webpack-app
+cd my-react-webpack-app
+npm init -y
+🔹 Step 2: Install Dependencies
+Required packages:
+bash
+Copy
+Edit
+npm install react react-dom
+npm install --save-dev webpack webpack-cli webpack-dev-server
+npm install --save-dev babel-loader @babel/core @babel/preset-env @babel/preset-react
+npm install --save-dev html-webpack-plugin
+npm install --save-dev css-loader style-loader
+🔹 Step 3: Create File Structure
+pgsql
+Copy
+Edit
+my-react-webpack-app/
+├── public/
+│   └── index.html
+├── src/
+│   ├── index.js
+│   └── App.js
+├── .babelrc
+├── webpack.config.js
+├── package.json
+🔹 Step 4: Configure Babel
+📄 .babelrc
+
+json
+Copy
+Edit
+{
+  "presets": ["@babel/preset-env", "@babel/preset-react"]
+}
+🔹 Step 5: Create HTML Template
+📄 public/index.html
+
+html
+Copy
+Edit
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>React with Webpack</title>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>
+🔹 Step 6: Create React Entry Files
+📄 src/index.js
+
+js
+Copy
+Edit
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+
+ReactDOM.render(<App />, document.getElementById('root'));
+📄 src/App.js
+
+js
+Copy
+Edit
+import React from 'react';
+
+const App = () => <h1>Hello React with Webpack</h1>;
+
+export default App;
+🔹 Step 7: Configure Webpack
+📄 webpack.config.js
+
+js
+Copy
+Edit
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
+    clean: true,
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: 'babel-loader',
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
+    }),
+  ],
+  devServer: {
+    static: './dist',
+    port: 3000,
+    open: true,
+    hot: true,
+  },
+  mode: 'development',
+};
+🔹 Step 8: Add Scripts in package.json
+📄 package.json
+
+json
+Copy
+Edit
+"scripts": {
+  "start": "webpack serve --mode development",
+  "build": "webpack --mode production"
+}
+✅ Step 9: Start the Development Server
+bash
+Copy
+Edit
+npm start
+✅ Step 10: Build the Project for Production
+bash
+Copy
+Edit
+npm run build
+
