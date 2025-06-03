@@ -1,0 +1,233 @@
+CI/CD Fundamentals & Concepts
+
+1. What is CI/CD? Explain the difference between CI, CD (Delivery), and CD (Deployment).
+
+CI (Continuous Integration): Automatically building and testing code changes whenever a developer commits code.
+
+CD (Continuous Delivery): Ensuring that code is always in a deployable state. Code is pushed to staging or pre-production but requires manual approval for production.
+
+CD (Continuous Deployment): Every change that passes tests is automatically deployed to production without manual approval.
+
+2. How do you design a CI/CD pipeline for a microservices-based application in AWS?
+
+Use CodePipeline to orchestrate the workflow.
+
+CodeCommit/GitHub as the source.
+
+CodeBuild for compiling/building/testing each microservice.
+
+Docker images pushed to Amazon ECR.
+
+CodeDeploy or ECS blue/green deployments.
+
+Secrets via Secrets Manager or SSM Parameter Store.
+
+Monitor with CloudWatch and alert via SNS.
+
+3. Common challenges and how to address them:
+
+Challenge: Long build times → Solution: Parallel builds, caching dependencies.
+
+Challenge: Secrets management → Solution: Use Secrets Manager or SSM Parameter Store.
+
+Challenge: Environment consistency → Solution: Docker and IaC.
+
+Challenge: Rollbacks → Solution: Implement blue/green or canary deployments.
+
+4. What are blue/green and canary deployments?
+
+Blue/Green: Two identical environments. Switch traffic from old (blue) to new (green).
+
+Canary: Gradually route traffic to the new version.
+
+AWS Implementation: Use CodeDeploy with ECS or EC2 with traffic shifting policies.
+
+5. Benefits of Infrastructure as Code (IaC) in CI/CD:
+
+Reproducibility
+
+Version control
+
+Automation
+
+Easier rollback and auditing
+
+Integration with CI/CD tools (CloudFormation, Terraform)
+
+AWS-Specific CI/CD Tools
+
+6. What is AWS CodePipeline?
+
+A fully managed CI/CD orchestration service that automates build, test, and deployment phases.
+
+7. Components of AWS CodePipeline:
+
+Source Stage: e.g., GitHub, CodeCommit
+
+Build Stage: e.g., CodeBuild
+
+Test Stage (optional)
+
+Deploy Stage: e.g., CodeDeploy, ECS, Lambda
+
+8. CodeBuild vs CodeDeploy:
+
+CodeBuild: Used for compiling code, running tests, creating build artifacts.
+
+CodeDeploy: Automates code deployment to EC2, Lambda, or ECS.
+
+Use CodeBuild for build/test, CodeDeploy for deployment.
+
+9. Integrating GitHub with CodePipeline:
+
+Create a personal access token in GitHub.
+
+Connect GitHub as a source in CodePipeline.
+
+Configure webhooks to trigger the pipeline on every push.
+
+10. buildspec.yml vs appspec.yml:
+
+buildspec.yml: Instructions for CodeBuild (install, build, post_build).
+
+appspec.yml: Instructions for CodeDeploy (hooks, files, lifecycle events).
+
+Integrations & Automation
+
+11. Automating tests and deployment:
+
+Add test commands in buildspec.yml.
+
+Use CodePipeline to trigger CodeBuild → Unit Tests → Integration Tests → Deployment.
+
+12. CI/CD for containerized apps (ECS/EKS):
+
+Push Docker image to ECR in build stage.
+
+Update ECS service using CodeDeploy or directly via ECS API.
+
+For EKS: Use kubectl in CodeBuild to apply new manifests.
+
+13. Managing environment variables and secrets:
+
+Use AWS Secrets Manager or SSM Parameter Store.
+
+Inject via environment variables in CodeBuild or ECS task definitions.
+
+14. Using SSM Parameter Store/Secrets Manager:
+
+Grant IAM access to CodeBuild.
+
+Use aws ssm get-parameter or aws secretsmanager get-secret-value in buildspec.
+
+15. Using IaC (CloudFormation/Terraform):
+
+Store infrastructure code in version control.
+
+Use CodeBuild or pipeline stage to run terraform apply or deploy CloudFormation templates.
+
+Deployment & Rollbacks
+
+16. Safe rollback mechanisms in CodeDeploy:
+
+Use automatic rollback settings on failure.
+
+Maintain multiple versions.
+
+Use blue/green strategy to keep old environment intact.
+
+17. Managing multiple environments (dev, staging, prod):
+
+Separate pipelines or stages.
+
+Use different parameter sets and deploy targets.
+
+Use approval stages for production deployments.
+
+18. Canary/blue-green with Auto Scaling or Lambda:
+
+ECS/EC2: Use CodeDeploy with weighted traffic shifting.
+
+Lambda: Use alias and weighted routing.
+
+Advanced Topics
+
+19. Monitoring & logging CodePipeline:
+
+Use CloudWatch Logs.
+
+Set up CloudWatch Alarms on failure.
+
+Enable detailed logging in buildspec and appspec.
+
+20. High availability and fault tolerance:
+
+Store artifacts in S3.
+
+Retry policies in CodeBuild.
+
+Deploy in multiple AZs.
+
+Use auto-scaling for ECS/EC2 instances.
+
+21. Custom actions in CodePipeline:
+
+Use Lambda or custom webhook integrations.
+
+Define custom providers and stages.
+
+22. Security best practices:
+
+Use IAM roles with least privilege.
+
+Store secrets in Secrets Manager.
+
+Enable encryption for artifacts.
+
+Audit with CloudTrail.
+
+23. Using EventBridge or CloudWatch Events:
+
+Trigger notification or other workflows based on pipeline state changes.
+
+Automate cleanup or testing jobs.
+
+24. Versioning Lambda or ECS in pipeline:
+
+Lambda: Use aliases and versions, shift traffic gradually.
+
+ECS: Tag Docker images with version, update task definition.
+
+Hands-On / Scenario-Based
+
+25. Build CI/CD pipeline for ECS Fargate with SNS notification:
+
+Source: GitHub repo (connected to CodePipeline)
+
+Build: CodeBuild (Docker build, push to ECR)
+
+Deploy: ECS service with new task definition
+
+Notify: SNS topic on failure using CloudWatch Event rule
+
+26. Troubleshooting intermittent CodeBuild failures:
+
+Check CloudWatch logs
+
+Use retry strategy
+
+Cache dependencies
+
+Break build into smaller steps
+
+Ensure build environment consistency
+
+27. Test infrastructure before production:
+
+Use staging environment
+
+Run terraform/CloudFormation in preview mode
+
+Use feature flags or traffic routing
+
+Run integration and smoke tests in pipeline

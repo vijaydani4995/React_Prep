@@ -1,0 +1,229 @@
+Deploying a React frontend and a Node.js backend on IIS (Internet Information Services) server requires a combination of IIS configurations, Node.js hosting, and static file serving. Below is a step-by-step guide to deploy both React and Node.js on an IIS server.
+
+Prerequisites:
+IIS installed on your Windows server.
+Node.js installed on the server.
+IIS Node Module installed for running Node.js on IIS.
+React project ready for production.
+Node.js backend ready for production.
+URL Rewrite Module installed for IIS.
+Step 1: Prepare the React App (Frontend)
+Build the React app for production:
+
+Navigate to your React project directory and run:
+
+npm run build
+This will generate a build folder containing the static files.
+Move the React app to the IIS server:
+
+Transfer the contents of the build folder to a directory on your IIS server. For example, C:\inetpub\wwwroot\react-app.
+Step 2: Prepare the Node.js App (Backend)
+Ensure your Node.js app is production-ready:
+
+Check that your server.js (or app.js) file is configured to listen on a port, and it is ready for production.
+Install dependencies:
+
+On your IIS server, navigate to the Node.js project directory and install all the required dependencies:
+
+
+npm install --production
+
+
+
+Step 3: Configure IIS for the React Frontend
+Add a new website in IIS:
+
+Open IIS Manager.
+Right-click on Sites and choose Add Website.
+Set the Site Name to something like ReactFrontend.
+Set the Physical Path to the React app directory (C:\inetpub\wwwroot\react-app).
+Assign a Host Name (e.g., reactapp.local) or leave it as localhost for testing.
+Configure MIME Types for React:
+
+Go to the new website in IIS.
+Double-click on MIME Types.
+Ensure that .json files have the correct MIME type (application/json).
+Set up URL Rewrite (Optional but recommended):
+
+Install the URL Rewrite Module from here.
+Set up a rewrite rule to ensure that React handles the routing:
+Double-click on URL Rewrite under the IIS Manager.
+Add a new Inbound Rule.
+Configure a rule to route all requests to the index.html:
+
+<rule name="React SPA Routing" stopProcessing="true">
+    <match url=".*" />
+    <conditions logicalGrouping="MatchAll">
+        <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+        <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+    </conditions>
+    <action type="Rewrite" url="/index.html" />
+</rule>
+
+below example web.config file for DR Tool:
+
+<configuration>
+  <system.webServer>
+    <rewrite>
+      <rules>
+        <!-- Redirect HTTP to HTTPS -->
+        <rule name="Redirect to HTTPS" stopProcessing="true">
+          <match url="(.*)" />
+          <conditions>
+            <!-- Check if the request is not HTTPS -->
+            <add input="{HTTPS}" pattern="off" />
+          </conditions>
+          <action type="Redirect" url="https://10.112.115.200/{R:1}" redirectType="Permanent" />
+        </rule>
+		 <rule name="StaticContent" stopProcessing="true">
+          <match url="(.*)" />
+          <conditions>
+            <add input="{REQUEST_FILENAME}" matchType="IsFile" />
+          </conditions>
+          <action type="None" />
+        </rule>
+		<rule name="React SPA Routing" stopProcessing="true">
+    <match url=".*" />
+    <conditions logicalGrouping="MatchAll">
+        <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+        <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+    </conditions>
+    <action type="Rewrite" url="/index.html" />
+</rule>
+                
+      </rules>
+    </rewrite>
+  </system.webServer>
+</configuration>
+
+
+
+Step 4: Configure IIS for the Node.js Backend
+Create a Node.js site in IIS:
+
+Right-click on Sites and select Add Website.
+Set the Site Name to NodeBackend should contain build folder also with index.html.
+Set the Physical Path to the Node.js app directory.
+Set the Host Name to something appropriate (e.g., api.local) or leave it as localhost or IP address.
+Set a port for the Node app (ensure it’s not conflicting with the React app port),Port number should be same as which presents in server.js file,
+front end port anything is fine.
+Configure IIS Node Handler:
+
+Ensure the iisnode handler is mapped:
+Open the website in IIS Manager.
+Double-click Handler Mappings.
+Ensure that .js requests are handled by iisnode.
+Configure the Node.js application web.config:
+
+Create a web.config file in the root of the Node.js project directory with the following content:
+xml
+
+<configuration>
+  <system.webServer>
+    <handlers>
+      <add name="iisnode" path="app.js" verb="*" modules="iisnode" />
+    </handlers>
+    <rewrite>
+      <rules>
+        <rule name="Node.js Rewrite" stopProcessing="true">
+          <match url="/*" />
+          <action type="Rewrite" url="app.js" />
+        </rule>
+      </rules>
+    </rewrite>
+    <iisnode loggingEnabled="true" devErrorsEnabled="true" />
+  </system.webServer>
+</configuration>
+Replace app.js with the entry point of your Node.js application.
+
+example of DR portal Web.config
+
+<configuration>
+  <system.webServer>
+    <handlers>
+            <remove name="iisnode" />
+      <add name="iisnodes" path="server.js" verb="*" modules="iisnode" />
+    </handlers>
+    <rewrite>
+		
+      <rules>
+        <rule name="NodeJsRouting" stopProcessing="true">
+          <match url="/*" />
+          <action type="Rewrite" url="server.js" />
+        </rule>
+		        <rule name="Redirect to HTTPS" stopProcessing="true">
+          <match url="(.*)" />
+          <conditions>
+            <!-- Check if the request is not HTTPS -->
+            <add input="{HTTPS}" pattern="off" />
+          </conditions>
+          <action type="Redirect" url="https://10.112.115.200/{R:1}" redirectType="Permanent" />
+        </rule>
+	
+      </rules>
+    </rewrite>
+  </system.webServer>
+</configuration>
+
+If incase you get error while double clicking on handler mapping,or it is not allowing to add handler mapping,you should have to try below steps:
+
+1.Navigate to below path C:\Windows\System32\inetsrv\config\applicationHost.config and    
+        
+ change <section name="applicationPools" allowDefinition="AppHostOnly" overrideModeDefault="Deny" />  change it overrideModeDefault="Allow"
+ 
+2.Navigate to C:\Windows\System32\inetsrv and run 
+
+appcmd recycle apppool /apppool.name:"YourAppPoolName"
+
+ 
+ 
+  <sectionGroup name="system.applicationHost">
+            <section name="applicationPools" allowDefinition="AppHostOnly" overrideModeDefault="Allow" />
+            <section name="configHistory" allowDefinition="AppHostOnly" overrideModeDefault="Deny" />
+            <section name="customMetadata" allowDefinition="AppHostOnly" overrideModeDefault="Deny" />
+            <section name="listenerAdapters" allowDefinition="AppHostOnly" overrideModeDefault="Deny" />
+            <section name="log" allowDefinition="AppHostOnly" overrideModeDefault="Allow" />
+            <section name="serviceAutoStartProviders" allowDefinition="AppHostOnly" overrideModeDefault="Deny" />
+            <section name="sites" allowDefinition="AppHostOnly" overrideModeDefault="Deny" />
+            <section name="webLimits" allowDefinition="AppHostOnly" overrideModeDefault="Allow" />
+        </sectionGroup>
+
+
+Step 5: Reverse Proxy Setup (Optional, if Frontend and Backend are on the Same Domain)
+Configure reverse proxy on the React IIS website:
+If both the React frontend and Node.js backend are on the same server, you can set up a reverse proxy so that requests from the frontend can be forwarded to the backend.
+Open the web.config file for the React website and add a reverse proxy rule to forward requests to the Node.js backend:
+xml
+
+<rewrite>
+  <rules>
+    <rule name="Proxy to API" stopProcessing="true">
+      <match url="^api/(.*)" />
+      <action type="Rewrite" url="http://localhost:3000/{R:1}" />
+    </rule>
+  </rules>
+</rewrite>
+This rule will forward any request to /api/* to the Node.js backend running on port 3000.
+Step 6: Test and Debug
+Start the Node.js application:
+
+Ensure that the Node.js app is running in IIS by visiting the backend URL (e.g., http://api.local).
+Test the React app:
+
+Visit the React frontend URL (e.g., http://reactapp.local) and check if it's working.
+Check logs and debug:
+
+For Node.js, IISNode provides error and log files in the directory specified in your web.config.
+Step 7: Enable HTTPS 
+Install an SSL Certificate on IIS for both the React and Node.js sites.
+Force HTTPS for both the frontend and backend by adding an additional rule in the web.config files:
+xml
+
+<rule name="Force HTTPS" stopProcessing="true">
+  <match url="(.*)" />
+  <conditions>
+    <add input="{HTTPS}" pattern="off" />
+  </conditions>
+  <action type="Redirect" url="https://{HTTP_HOST}/{R:1}" redirectType="Permanent" />
+</rule>
+By following these steps, you'll have your React frontend and Node.js backend successfully deployed on IIS, with routing and URL rewriting configured as needed.

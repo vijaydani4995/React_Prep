@@ -1,0 +1,79 @@
+Find top 5 employees with the highest salary in each department
+
+
+SELECT * FROM (
+    SELECT first_name, salary, department_id, 
+           ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rank
+    FROM employees
+) AS ranked_employees WHERE rank <= 5;
+
+
+
+
+Update salary of employees by 10%
+
+UPDATE employees SET salary = salary * 1.10;
+
+
+Delete employees who have not been active for more than a year
+
+DELETE FROM employees WHERE last_active < CURRENT_DATE - INTERVAL '1' YEAR;
+
+
+Use of COALESCE to handle NULL values
+
+SELECT first_name, COALESCE(phone, 'No phone') FROM employees;
+
+
+Union two result sets
+
+SELECT first_name FROM employees
+UNION
+SELECT first_name FROM customers;
+
+
+Union All result sets (without removing duplicates)
+
+
+SELECT first_name FROM employees
+UNION ALL
+SELECT first_name FROM customers;
+
+Find employees without managers (Self join)
+
+
+SELECT e.first_name FROM employees e
+LEFT JOIN employees m ON e.manager_id = m.employee_id
+WHERE m.employee_id IS NULL;
+
+
+Correlated subquery example
+
+
+SELECT first_name, salary FROM employees e1
+WHERE salary > (SELECT AVG(salary) FROM employees e2 WHERE e2.department_id = e1.department_id);
+
+
+Create a view that shows employee details
+
+
+CREATE VIEW employee_details AS 
+SELECT first_name, last_name, department_name, salary
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id;
+
+
+
+Use of CTE (Common Table Expression)
+
+
+WITH department_salary AS (
+    SELECT department_id, AVG(salary) AS avg_salary
+    FROM employees
+    GROUP BY department_id
+)
+SELECT e.first_name, e.salary, d.avg_salary
+FROM employees e
+JOIN department_salary d ON e.department_id = d.department_id;
+
+

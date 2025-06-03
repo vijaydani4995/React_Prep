@@ -1,0 +1,79 @@
+In Node.js, the fork() method is used to spawn a new Node.js process. It's a special case of the child_process.spawn() method specifically 
+designed to create a new Node.js instance that can run in parallel with the parent process. The new process (child) can communicate with
+the parent process via inter-process communication (IPC) channels, which allow them to send messages back and forth.
+ 
+ 
+The fork() method is part of the child_process module and is mainly used for creating child processes to run scripts or perform tasks 
+that can run independently of the parent process. It is often used when you want to offload heavy computational tasks or execute isolated
+logic.
+
+
+Let's walk through an example where we use fork() to create a child process to handle some heavy computation.
+
+1. Parent Process (main.js)
+This is the main process that will fork a child process to perform a task.
+
+
+// main.js
+const { fork } = require('child_process');
+
+// Fork the child process
+const childProcess = fork('child.js');
+
+// Send data to the child process
+childProcess.send({ number: 20 });
+
+// Listen for a message from the child process
+childProcess.on('message', (result) => {
+  console.log(`Received result from child process: ${result}`);
+  childProcess.kill(); // Kill the child process after receiving the result
+});
+
+console.log('Main process continues to run...');
+2. Child Process (child.js)
+This is the script that will be executed by the child process. It will receive data from the parent process, perform a computation (in this case, calculating the factorial of a number), and send the result back.
+
+javascript
+Copy code
+// child.js
+
+// Function to calculate the factorial of a number
+function factorial(n) {
+  if (n === 0 || n === 1) {
+    return 1;
+  }
+  return n * factorial(n - 1);
+}
+
+// Listen for a message from the parent process
+process.on('message', (message) => {
+  console.log(`Child process received number: ${message.number}`);
+  const result = factorial(message.number);
+
+  // Send the result back to the parent process
+  process.send(result);
+});
+Explanation:
+Parent Process (main.js):
+
+The parent process uses fork() to create a new child process that runs the child.js file.
+The parent sends a message (number 20 in this case) to the child process using childProcess.send().
+It then listens for the response from the child via the childProcess.on('message') event.
+Once the result is received, it prints the result and kills the child process.
+Child Process (child.js):
+
+The child process listens for incoming messages using process.on('message').
+It receives the number, calculates the factorial, and sends the result back to the parent process using process.send().
+Running the Example:
+Save main.js and child.js in the same directory.
+Run node main.js in your terminal.
+You should see output like this:
+arduino
+Copy code
+Main process continues to run...
+Child process received number: 20
+Received result from child process: 2432902008176640000
+Why Use Fork?
+Concurrency: You can use fork() to spawn multiple child processes to run tasks concurrently, especially useful for CPU-intensive tasks.
+Isolation: Each child process runs in a separate memory space, so you avoid blocking the event loop of the main process.
+Inter-process Communication (IPC): The parent and child processes can easily communicate using IPC channels, which are automatically established when using fork().

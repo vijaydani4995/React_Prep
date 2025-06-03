@@ -1,0 +1,120 @@
+1.What is the difference between inline, block, and inline-block elements?
+
+inline: Doesn't start on a new line, width/height cannot be set.
+block: Starts on a new line, width/height can be set.
+inline-block: Behaves like inline but allows setting width/height.
+
+
+2.What are CSS Grid and Flexbox? Compare them.
+
+CSS Grid: Two-dimensional layout system for rows and columns.
+Flexbox: One-dimensional layout system for rows or columns.
+
+3.What is the difference between visibility: hidden and display: none?
+
+visibility: hidden: The element is hidden but still occupies space.
+display: none: The element is removed from the layout and doesn’t occupy space.
+
+4.Explain the z-index property in CSS.
+
+Determines the stack order of elements.
+Elements with a higher z-index appear in front of those with lower values.
+
+5.What are the different types of CSS selectors?
+
+Universal Selector (*)
+Type Selector (div, p)
+Class Selector (.class)
+ID Selector (#id)
+Attribute Selector ([type="text"])
+Grouping Selector (h1, h2)
+
+
+What is the difference between position: sticky and position: fixed?
+
+sticky: Behaves like relative until it reaches a scroll threshold, then sticks like fixed.
+fixed: Always remains fixed relative to the viewport.
+
+What are CSS animations? How are they different from transitions?
+
+Animations: Allow keyframes for complex animations (@keyframes).
+Transitions: Define changes in styles over a period of time.
+
+div {
+    transition: background-color 0.5s;
+    animation: slide 2s infinite;
+}
+
+@keyframes slide {
+    from { transform: translateX(0); }
+    to { transform: translateX(100px); }
+}
+What are pseudo-elements in CSS? How are they different from pseudo-classes?
+
+Pseudo-elements: Style specific parts of an element (::before, ::after).
+Pseudo-classes: Style elements in a specific state (:hover, :first-child).
+What are the differences between min-width, max-width, and width?
+
+width: Fixed width of the element.
+min-width: Sets the minimum width an element can shrink to.
+max-width: Sets the maximum width an element can grow to.
+Explain the concept of specificity in CSS.
+
+Determines which CSS rule applies when there are conflicts.
+Inline styles: Highest (1000)
+IDs: High (100)
+Classes, attributes, pseudo-classes: Medium (10)
+Elements, pseudo-elements: Low (1)
+What is the difference between inline-style and external CSS?
+
+Inline styles are defined directly on an element, while external CSS is defined in separate .css files.
+What is the difference between overflow: hidden, scroll, and auto?
+
+hidden: Content outside the container is not visible.
+scroll: Scrollbars always appear.
+auto: Scrollbars appear only when needed.
+How would you implement a responsive design without using frameworks like Bootstrap?
+
+Use CSS techniques like:
+Media queries.
+CSS Grid and Flexbox.
+Relative units like %, em, and vh/vw.
+Practical Scenarios
+How do you center an element vertically and horizontally?
+
+Using Flexbox:
+css
+Copy code
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+Using Grid:
+
+.container {
+    display: grid;
+    place-items: center;
+    height: 100vh;
+}
+How do you make a website mobile-friendly?
+
+Use responsive layouts, media queries, and relative units.
+What is the difference between nth-child and nth-of-type?
+
+nth-child: Targets the element based on its position in the parent.
+nth-of-type: Targets the element based on its type and position.
+How would you style a button when it’s hovered?
+
+css
+Copy code
+button:hover {
+    background-color: blue;
+    color: white;
+}
+How do you optimize CSS for performance?
+
+Minimize and combine CSS files.
+Use shorthand properties.
+Avoid redundant selectors.

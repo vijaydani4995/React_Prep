@@ -1,0 +1,220 @@
+Here’s a comprehensive guide on Objects, Prototypes, and Prototypal Inheritance in JavaScript, structured for clarity and covering both fundamental and advanced aspects.
+
+1. Objects in JavaScript
+Objects are collections of key-value pairs. Keys are strings or symbols, and values can be of any type.
+
+Creating Objects
+a. Object Literals
+
+const person = {
+  name: "Vijay",
+  age: 30,
+  greet: function () {
+    console.log(`Hello, I am ${this.name}`);
+  },
+};
+b. Constructor Function
+
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+const person1 = new Person("Anjali", 25);
+c. Object.create
+
+const prototypeObj = { greet: function () { console.log("Hello"); } };
+const newObj = Object.create(prototypeObj);
+newObj.name = "Vijay";
+Common Object Methods
+Object.keys - Returns an array of keys.
+
+
+console.log(Object.keys(person)); // ["name", "age", "greet"]
+Object.values - Returns an array of values.
+
+
+console.log(Object.values(person)); // ["Vijay", 30, ƒ]
+Object.entries - Returns an array of key-value pairs.
+
+
+console.log(Object.entries(person));
+// [["name", "Vijay"], ["age", 30], ["greet", ƒ]]
+Object.assign - Copies properties from one object to another.
+
+
+const newPerson = Object.assign({}, person);
+Object.freeze - Prevents modification of an object.
+
+
+Object.freeze(person);
+person.age = 35; // Does nothing
+Object.seal - Prevents adding or removing properties but allows modification.
+
+
+Object.seal(person);
+person.age = 35; // Works
+2. Prototypes
+Every JavaScript object has a hidden property called [[Prototype]] that points to another object or null. This is the object's prototype.
+
+Accessing the Prototype
+Use Object.getPrototypeOf(obj) to access the prototype of an object.
+Use obj.__proto__ (deprecated but still widely used).
+
+const obj = {};
+console.log(obj.__proto__); // Object.prototype
+Prototype Methods
+a. Adding Methods to a Prototype
+You can add methods to an object's prototype, and all instances inherit them:
+
+
+function Person(name) {
+  this.name = name;
+}
+
+Person.prototype.greet = function () {
+  console.log(`Hello, I am ${this.name}`);
+};
+
+const person1 = new Person("Vijay");
+person1.greet(); // "Hello, I am Vijay"
+b. Checking Prototype Chain
+Use obj instanceof Constructor or isPrototypeOf to check inheritance.
+
+
+console.log(person1 instanceof Person); // true
+console.log(Person.prototype.isPrototypeOf(person1)); // true
+3. Prototypal Inheritance
+Prototypal inheritance allows one object to inherit properties and methods from another object.
+
+How It Works
+When you access a property on an object, JavaScript:
+
+Looks for the property on the object itself.
+If not found, it checks the prototype of the object.
+Continues up the prototype chain until the property is found or the end of the chain (null) is reached.
+Examples
+a. Simple Inheritance
+
+const parent = { greet: function () { console.log("Hello from parent"); } };
+const child = Object.create(parent);
+
+child.greet(); // "Hello from parent"
+b. Using Constructor Functions
+
+function Parent(name) {
+  this.name = name;
+}
+
+Parent.prototype.sayHello = function () {
+  console.log(`Hello, I am ${this.name}`);
+};
+
+function Child(name, age) {
+  Parent.call(this, name); // Call parent constructor
+  this.age = age;
+}
+
+Child.prototype = Object.create(Parent.prototype);
+Child.prototype.constructor = Child;
+
+const child = new Child("Vijay", 30);
+child.sayHello(); // "Hello, I am Vijay"
+c. ES6 Classes (Syntactic Sugar for Prototypes)
+
+class Parent {
+  constructor(name) {
+    this.name = name;
+  }
+
+  greet() {
+    console.log(`Hello, I am ${this.name}`);
+  }
+}
+
+class Child extends Parent {
+  constructor(name, age) {
+    super(name);
+    this.age = age;
+  }
+}
+
+const child = new Child("Anjali", 25);
+child.greet(); // "Hello, I am Anjali"
+4. Key Differences Between __proto__ and prototype
+__proto__	prototype
+A property of an object instance.	A property of a constructor function.
+Points to the prototype of the object.	Used to set properties/methods for objects created by the constructor.
+Example:
+
+function Person(name) {
+  this.name = name;
+}
+
+const person = new Person("Vijay");
+
+console.log(person.__proto__ === Person.prototype); // true
+console.log(Person.prototype.constructor === Person); // true
+5. Benefits of Prototypes and Prototypal Inheritance
+Memory Efficiency: Methods are shared across instances instead of being duplicated.
+Dynamic Behavior: Adding a method to the prototype updates all instances automatically.
+Flexibility: You can dynamically extend functionality at runtime.
+6. Modern Alternatives
+While prototypes are powerful, ES6 classes offer a cleaner and more intuitive way to work with inheritance and object-oriented patterns.
+
+
+class Parent {
+  constructor(name) {
+    this.name = name;
+  }
+
+  greet() {
+    console.log(`Hello, I am ${this.name}`);
+  }
+}
+
+class Child extends Parent {
+  constructor(name, age) {
+    super(name);
+    this.age = age;
+  }
+}
+
+const child = new Child("Vijay", 30);
+child.greet(); // "Hello, I am Vijay"
+7. Summary
+Objects are the foundation of JavaScript programming.
+Prototypes provide a mechanism for inheritance and shared behavior.
+Prototypal Inheritance enables objects to inherit from other objects.
+Modern JavaScript uses ES6 classes for object-oriented programming but is still based on prototypes under the hood.
+Would you like specific examples or further details on any of these topics?
+
+
+function sortInventory(inventory) {
+    // Step 1: Sort object keys alphabetically
+    const sortedKeys = Object.keys(inventory).sort();
+    const sortedInventory = {};
+
+    for (const key of sortedKeys) {
+        // Step 2: Sort the items within each category by their 'name'
+        sortedInventory[key] = inventory[key].sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    return sortedInventory;
+}
+
+const inventory = {
+    Electronics: [
+        { name: "Laptop", id: 1, price: 1200 },
+        { name: "Phone", id: 2, price: 800 }
+    ],
+    Clothing: [
+        { name: "Shirt", id: 3, price: 30 },
+        { name: "Jeans", id: 4, price: 50 },
+        { name: "Shrug", id: 5, price: 50 },
+        { name: "Hat", id: 6, price: 50 }
+    ]
+};
+
+const sortedInventory = sortInventory(inventory);
+console.log(sortedInventory);

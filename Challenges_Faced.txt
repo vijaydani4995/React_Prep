@@ -1,0 +1,56 @@
+🔟 Common Challenges & Sample Answers (for 5 YOE)
+1. Challenge: Unclear or Changing Requirements
+Situation: In one project, the client frequently changed requirements after development began.
+
+Action: I proposed setting up short feedback loops (weekly demos) with the client and documenting requirements in user stories.
+
+Result: This reduced rework by 40% and improved client satisfaction. The product evolved more predictably.
+
+2. Challenge: Performance Issues in React App
+Situation: A React dashboard was slow due to rendering of large data tables.
+
+Action: I used React.memo, virtualization (react-window), and lazy loading. I also reduced API calls using caching and debouncing techniques.
+
+Result: Page load time reduced from 6 seconds to under 2 seconds. The UX improved significantly.
+
+3. Challenge: API Integration Issues
+Situation: Backend APIs were unstable or undocumented.
+
+Action: I collaborated with backend teams using Postman to verify contracts. I introduced Swagger docs for consistent API references.
+
+Result: Integration time decreased, and the team had fewer front-end/backend mismatches.
+
+4. Challenge: Tight Deadlines
+Situation: We had a major release with just 2 weeks to build a reporting module.
+
+Action: I broke down features into MVP and nice-to-have, prioritized critical functionality, and worked in parallel with QA using feature flags.
+
+Result: Delivered MVP on time, and completed rest of the features in the next sprint without blocking the release.
+
+5. Challenge: Large Form with Complex Validation
+Situation: A multi-step checklist form had over 40 fields and conditional logic.
+
+Action: I built a reusable form component using React Hook Form and Yup schema validation. For performance, I split it into dynamic steps with lazy loading.
+
+Result: Code became modular, easy to maintain, and reduced bugs during QA.
+
+6. Challenge: State Management Was Getting Messy
+Situation: Prop drilling became complex in a large React app.
+
+Action: Migrated to Redux Toolkit with proper slices and async thunks for API calls. Added selectors to decouple components from store shape.
+
+Result: Codebase became cleaner, and new features could be added without side effects.
+
+7. Challenge: Team Collaboration Across Time Zones
+Situation: Team members were spread across Japan and India, affecting sync.
+
+Action: I introduced async documentation (Confluence/Jira), daily handoff messages, and clearly documented tasks and blockers.
+
+Result: Reduced delays and handoff confusion. Velocity improved by ~15%.
+
+8. Challenge: Database/API Performance
+Situation: A checklist retrieval API was slow due to joins on large tables.
+
+Action: Optimized SQL with indexes, used LIMIT/OFFSET, and paginated frontend data.
+
+Result: API time dropped from 5s to under 500ms.

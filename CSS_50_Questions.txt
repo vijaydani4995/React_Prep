@@ -1,0 +1,301 @@
+
+🔹 CSS Fundamentals
+What is the difference between class and id selectors?
+
+class: reusable; use with . (e.g., .btn)
+
+id: unique; use with # (e.g., #header)
+
+How is em different from rem in CSS?
+
+em: relative to the parent
+
+rem: relative to the root (html) element
+
+What are pseudo-classes in CSS?
+Special keywords added to selectors (e.g., :hover, :nth-child, :focus)
+
+What is the specificity hierarchy in CSS?
+Inline > ID > Class > Element > Universal
+Example: !important > inline styles > #id > .class > div
+
+What does the box-sizing property do?
+
+content-box: default; padding and border not included in width
+
+border-box: includes padding and border in width
+
+Difference between position: relative, absolute, fixed, and sticky?
+
+relative: positioned relative to itself
+
+absolute: relative to the nearest positioned ancestor
+
+fixed: relative to viewport
+
+sticky: toggles between relative and fixed on scroll
+
+What is the default position of an HTML element?
+
+static
+
+What is the difference between visibility: hidden and display: none?
+
+hidden: element is invisible but still takes space
+
+none: element is removed from the layout
+
+What’s the difference between min-width, max-width, and width?
+
+min-width: sets the minimum width
+
+max-width: sets the maximum width
+
+width: fixed width unless overridden
+
+What are media queries in CSS?
+Used for responsive designs based on screen size or resolution
+
+css
+Copy
+Edit
+@media (max-width: 600px) {
+  .box { font-size: 12px; }
+}
+🔹 Flexbox & Grid
+What is Flexbox?
+A layout model that arranges items in one dimension (row or column).
+
+What does justify-content do in flexbox?
+Aligns items horizontally in the main axis.
+
+What does align-items do in flexbox?
+Aligns items vertically in the cross axis.
+
+Difference between align-items and align-content?
+
+align-items: single row
+
+align-content: multiple rows
+
+What are the default values of flex-direction and justify-content?
+
+flex-direction: row
+
+justify-content: flex-start
+
+What is flex-grow, flex-shrink, and flex-basis?
+
+grow: proportionally grow
+
+shrink: proportionally shrink
+
+basis: initial size
+
+What is CSS Grid and how is it different from Flexbox?
+Grid: 2D layout (rows and columns)
+Flexbox: 1D layout (either row or column)
+
+How to create a two-column grid layout?
+
+css
+Copy
+Edit
+display: grid;
+grid-template-columns: 1fr 1fr;
+How to create a responsive grid using repeat and auto-fit?
+
+css
+Copy
+Edit
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+Can we use Grid and Flexbox together?
+Yes. Use Grid for layout, and Flexbox for item alignment within grid cells.
+
+🔹 Advanced Selectors & Styling
+What are attribute selectors?
+
+input[type="text"] { color: red; }
+What is the :nth-child() selector?
+Matches element based on its position.
+
+
+li:nth-child(2) { color: blue; }
+What is the difference between :nth-child() and :nth-of-type()?
+
+nth-child(): counts all child elements
+
+nth-of-type(): only of the same tag type
+
+What is the universal selector *?
+Applies styles to all elements
+
+css
+Copy
+Edit
+* { margin: 0; padding: 0; }
+How do you apply styles only to the first paragraph inside a div?
+
+css
+Copy
+Edit
+div p:first-of-type { color: red; }
+🔹 Animations & Transitions
+What is the difference between animation and transition?
+
+transition: changes from one state to another
+
+animation: allows multiple keyframes over time
+
+Basic syntax for CSS transition
+
+css
+Copy
+Edit
+.btn {
+  transition: background 0.3s ease;
+}
+Basic syntax for CSS animation
+
+css
+Copy
+Edit
+@keyframes slide {
+  from { transform: translateX(0); }
+  to { transform: translateX(100px); }
+}
+How to make an element spin continuously?
+
+css
+Copy
+Edit
+animation: spin 2s linear infinite;
+What are animation keyframes?
+Define intermediate steps in an animation
+
+🔹 Best Practices & Performance
+What are some CSS performance tips?
+
+Minimize use of universal selectors
+
+Avoid deep selector nesting
+
+Use shorthand
+
+Combine CSS files
+
+What are critical CSS and lazy loading?
+
+Critical CSS: Above-the-fold styles loaded first
+
+Lazy loading: Defer loading assets/styles not needed immediately
+
+How do you organize large CSS codebases?
+
+Use BEM naming convention
+
+Use SASS or CSS Modules
+
+Component-based styling
+
+What is specificity and how to override styles properly?
+Avoid !important when possible; use more specific selectors or proper cascade
+
+What is z-index and how does it work?
+Controls stacking order of elements with position set
+
+🔹 Responsive Design & Mobile First
+What is mobile-first design?
+Design for the smallest screen first, then scale up using media queries
+
+How do you hide elements on small screens only?
+
+css
+Copy
+Edit
+@media (max-width: 600px) {
+  .sidebar { display: none; }
+}
+How to make images responsive?
+
+css
+Copy
+Edit
+img { max-width: 100%; height: auto; }
+Difference between vh, vw, %, and px units?
+
+vh/vw: viewport height/width
+
+%: relative to parent
+
+px: fixed
+
+What are breakpoints in responsive design?
+Specific screen widths where layout/style changes
+(e.g., 576px, 768px, 992px)
+
+🔹 Tools & Preprocessors
+What is a CSS preprocessor?
+Tools like SASS or LESS that extend CSS with variables, nesting, mixins
+
+What are variables in SASS?
+
+scss
+Copy
+Edit
+$primary-color: #ff6600;
+body { color: $primary-color; }
+What is a mixin in SASS?
+Reusable group of styles
+
+scss
+Copy
+Edit
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+What are CSS modules?
+Scoped CSS used in React or component-based frameworks
+
+🔹 Debugging & Miscellaneous
+How to debug CSS issues in browser?
+Use browser DevTools (F12) > Inspect Element > CSS styles panel
+
+What is the stacking context?
+Determines how elements are layered; created by positioned elements with z-index
+
+Can a div be vertically centered using Flexbox?
+
+css
+Copy
+Edit
+display: flex;
+align-items: center;
+justify-content: center;
+How to create a triangle using CSS?
+
+css
+Copy
+Edit
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid red;
+}
+What is the difference between inline, block, and inline-block?
+
+inline: no line break, no width/height
+
+block: takes full width
+
+inline-block: behaves like inline but accepts width/height
+
+What is the difference between relative and absolute units in CSS?
+
+Relative: %, em, rem, vh, vw
+
+Absolute: px, pt, cm, etc.

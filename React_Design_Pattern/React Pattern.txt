@@ -1,0 +1,326 @@
+Design patterns are the most effective solutions to the common software development challenges that a developer may face. Often, there are multiple solutions to 
+a single problem. They all solve the problem, but some may create issues when more complexity is introduced in the code.
+
+Need to Use Design Patterns in React:
+
+Some common challenges that a React developer faces are:
+
+Creating reusable components
+Uncontrolled and controlled components in form handling
+Reusing complex logic between multiple components
+
+
+
+1. Layout Components Pattern
+Layout components are those components that are responsible for arranging other components on a page. Basically, they determine
+ how the components should look on the page. In this pattern, we split the layout and the child component, so that making
+ changes in the layout component won’t affect the child. This maintains the separation between the two components.
+
+This pattern provides more flexibility in how the components may be used in the future.
+
+Let’s create a split screen by creating the layout component first.
+
+Example:
+
+Javascript
+
+
+
+export const SplitScreenLayout = ({ left, right }) => { 
+  return ( 
+      <div style={{ display: "flex" }}> 
+      <div style={{ flex: 1 }}>{left}</div> 
+      <div style={{ flex: 1 }}>{right}</div> 
+    </div> 
+  ); 
+};
+In the above code, there is “SplitScreenLayout” which is a layout component (parent) and it is going to display two children: left and right.
+
+Javascript
+
+
+
+const Left = () => { 
+    return <div>Display on the left side</div>; 
+}; 
+  
+  
+const Right = () => { 
+    return <div>Display on the right side</div>; 
+};
+In the above code, we have defined “Left” and “Right” as the two components that we are going to display on the page as a split screen. Now, we can use both the “Left” and “Right” components inside the “SplitScreenLayout” component.
+
+Example:
+
+Javascript
+
+
+
+export default function App() { 
+  return ( 
+    <> 
+      <SplitScreenLayout 
+          left={<Left />} 
+          right={<Right />} 
+      /> 
+    </> 
+  ); 
+}
+
+
+
+
+2. Conditional Rendering Pattern
+In software development, a lot of times a developer has to display different components based on different conditions.For example, if the logged-in
+ user is an admin, show its designation as “Admin” on the page. And if the logged-in user is a simple user, show its designation as “User”.
+
+This is where React conditional rendering comes in.
+
+Example:
+
+Javascript
+
+
+
+export default function App() { 
+    let [products, setProducts] = useState([]); 
+  
+    useEffect(() => { 
+        // fetch a list of products from the server 
+    }, []) 
+  
+    return ( 
+        <div className="App"> 
+            <h1>Products</h1> 
+            { 
+                products.length > 0 ? ( 
+                    // do something 
+                ) : ( 
+                    <p>No products</p> 
+                ) 
+            } 
+        </div> 
+    ); 
+} 
+In the above code, a list of products is being fetched in the useEffect hook when the component first mounts and the list is assigned to the
+“products” state variable. If there is at least one item in the product list, we are doing something in the code. But if there is no item in
+the list, we are displaying “No products”.
+
+
+3. Higher Order Components (HOCs) Pattern
+HOCs are functions that take a component and return a new component. They help us reuse complex code logic across our application. We don’t need 
+to create two separate components containing similar logic.
+
+Example:
+
+Javascript
+
+
+
+export const printProps = (Component) => { 
+  return (props) => { 
+    console.log(props); 
+    return <Component {...props} /> 
+  } 
+} 
+The HOC, printProps, starts with a small letter, unlike a functional component because in most cases, we don’t display them inside JSX. We return a 
+new component by taking its props and returning some JSX. In our case, the component itself with all of its props.
+
+That returned component is called SomeComponent, which will just display “I am SomeComponent” on the page.
+
+Example:
+
+Javascript
+
+
+
+export const SomeComponent = () => { 
+  return ( 
+      <div>I am SomeComponent</div> 
+  ) 
+} 
+Below is how we are using the HOC to print the props on the console with the help of SomeComponent.
+
+Example:
+
+Javascript
+
+
+
+export default function App() { 
+  const NewComponent = printProps(SomeComponent); 
+    
+  return ( 
+    <div> 
+      <NewComponent  
+        prop1="The value of prop1" 
+        prop2="The value of prop2" 
+      /> 
+    </div> 
+  ); 
+} 
+We have created a wrapper called “NewComponent” around “SomeComponent” that will display the props on the console given below.
+
+Output:
+
+
+4. Provider Pattern
+Imagine you are building a complex application with a lot of components and their states. How do you pass those states to the end component
+ without involving multiple components in between? To solve this problem, React introduced the provider pattern. The provider pattern shares data 
+ globally across the application between various components.
+
+There are multiple state management libraries like Redux, but React provides Context API out of the box to manage state.
+
+Example:
+
+Javascript
+
+
+
+export const Context = createContext(); 
+  
+export const ContextProvider = ({ children }) => { 
+  const [number, setNumber] = useState(0); 
+  
+  useEffect(() => { 
+      setNumber(number + 1); 
+  }, []); 
+  
+  return ( 
+    <Context.Provider value={{number}}> 
+        {children} 
+    </Context.Provider> 
+  ); 
+};
+We have created a context where we have added a number state that increments to 1 when the component first mounts.
+
+To use the number state variable, we need to wrap the whole app with the context provider.
+
+Example:
+
+Javascript
+
+
+
+export default function App() { 
+  return ( 
+    <ContextProvider> 
+        <BaseComponent /> 
+    </ContextProvider> 
+  ); 
+} 
+Now, with the help of BaseComponent, we can display the number state on the page.
+
+Example:
+
+Javascript
+
+
+
+export const BaseComponent = () => { 
+  const { number } = useContext(Context); 
+    
+  return <div>{number}</div>; 
+};
+With the Context API, we can use any state variable defined inside the context in any component.
+
+
+5. Presentational and Container Components Pattern
+Presentational and Container components separate the application layer from the view layer. The Presentational
+ component deals with how the component will look on the page, while the container component handles the data,
+ i.e., what will display on the page.
+
+Example: Presentational Component
+
+Javascript
+
+export const DisplayComments = ({ list }) => { 
+  return ( 
+    list && 
+      list.map((item) => { 
+        return ( 
+          <div key={item.id}> 
+              <p>{item.body}</p> 
+          </div> 
+        ); 
+    }) 
+  ); 
+};
+The above component just displays a list of comments on the page. It doesn’t handle the data fetching logic.
+
+Example: Container Component
+
+Javascript
+
+
+
+export const Comments = () => { 
+  const [comments, setComments] = useState([]); 
+  
+  useEffect(() => { 
+    (async () => { 
+      const response = await axios.get("https://jsonplaceholder.typicode.com/posts/1/comments"); 
+      setComments(response.data); 
+    })(); 
+  }, []); 
+  
+  return <DisplayComments list={comments} />; 
+};
+The above container component fetches the comments of a post and returns the presentational component with the comments passed as props.
+
+6. Render Props Pattern
+A render prop is basically a prop on a component whose value is a function that returns JSX. Here, the component calls the render prop instead of
+ rendering anything. Therefore, there’s no rendering logic being implemented.
+
+Example:
+
+Javascript
+
+
+
+const Username = (props) => props.render();
+We have created a Username component whose job is to render whatever we pass to its props, in our case, the name of a person.
+
+Example:
+
+Javascript
+
+
+
+export default function App() { 
+  return ( 
+    <div> 
+      <Username render={() => <h1>John</h1>} /> 
+      <Username render={() => <h1>Charles</h1>} /> 
+    </div> 
+  ); 
+} 
+We have used the “Username” component to display the names of two different people. This pattern increases the reusability of the component even more.
+
+
+7. Compound Pattern
+A compound pattern can be referred to as multiple components that are combined together to serve a common function. For example, select tag and option tag in HTML are responsible for creating dropdown menus.
+
+Example:
+
+Javascript
+
+<Tabs> 
+  <header> 
+    <ul> 
+      <li> 
+        <Tab id="a"> 
+            <button>Tab 1</button> 
+        </Tab> 
+      </li> 
+    </ul> 
+  </header> 
+  <main> 
+    <TabPanel active="a"> 
+      <div> 
+          Tab 1 Panel 
+      </div> 
+    </TabPanel> 
+  </main> 
+</Tabs>
+In the above code, there’s a “Tab” component that renders a tab panel when we click on the tab button. Here, multiple components are combined together to create one compound component.

@@ -1,0 +1,118 @@
+In JavaScript, strict mode is a way to enforce stricter parsing and error handling in your scripts or functions. It helps developers write cleaner and more secure code by catching common programming mistakes and preventing certain unsafe features of JavaScript.
+
+1. Strict Mode
+Strict mode is a restricted variant of JavaScript that eliminates some silent errors, makes debugging easier, and prevents the usage of certain problematic features.
+
+Enabling Strict Mode
+You can enable strict mode by placing the following directive at the beginning of a script or function:
+
+
+"use strict";
+Characteristics of Strict Mode
+Eliminates silent errors:
+
+Assigning to undeclared variables throws a ReferenceError.
+javascript
+Copy code
+"use strict";
+x = 10; // ReferenceError: x is not defined
+Disallows duplicate parameter names in functions:
+
+javascript
+Copy code
+"use strict";
+function sum(a, a) { // SyntaxError: Duplicate parameter name not allowed
+    return a + a;
+}
+Prevents usage of reserved keywords:
+
+Keywords reserved for future use (like implements, interface, private) cannot be used as variable names.
+javascript
+Copy code
+"use strict";
+var private = "test"; // SyntaxError
+this in functions defaults to undefined:
+
+In non-strict mode, this inside a function refers to the global object (window in browsers). In strict mode, it’s undefined.
+javascript
+Copy code
+"use strict";
+function showThis() {
+    console.log(this); // undefined
+}
+showThis();
+Prevents accidental modifications to global objects:
+
+javascript
+Copy code
+"use strict";
+Object.defineProperty(window, "PI", { value: 3.14, writable: false });
+PI = 3.1415; // TypeError: Cannot assign to read-only property 'PI'
+Disallows with statements:
+
+The with statement is disallowed because it makes code harder to understand and optimize.
+
+"use strict";
+with (Math) { // SyntaxError: Strict mode code may not include a with statement
+    x = cos(2);
+}
+2. Non-Strict Mode
+Non-strict mode is the default mode of JavaScript where the interpreter is more lenient and less restrictive.
+
+Characteristics of Non-Strict Mode
+Allows undeclared variables:
+
+
+x = 10; // No error; x becomes a global variable
+Allows duplicate parameter names:
+
+
+function sum(a, a) { // No error
+    return a + a;
+}
+Global object binding:
+
+this inside a function refers to the global object (e.g., window in browsers).
+
+function showThis() {
+    console.log(this); // [object Window] in browsers
+}
+showThis();
+Less restrictive use of keywords:
+
+Reserved keywords can sometimes be used as identifiers (not recommended, but allowed).
+Allows silent failures:
+
+Fails silently without throwing errors for certain actions.
+
+Object.defineProperty(window, "PI", { value: 3.14, writable: false });
+PI = 3.1415; // Fails silently, PI remains 3.14
+Allows with statements:
+
+Though discouraged, with statements can be used.
+
+with (Math) {
+    x = cos(2); // Allowed, though bad practice
+}
+Why Use Strict Mode?
+Avoid bugs: It catches common errors that can lead to bugs.
+Improves performance: It helps engines optimize the code by making it predictable.
+Future-proofing: Disallowed features are often considered problematic and might be deprecated.
+How to Use Strict Mode?
+At the script level:
+
+
+"use strict";
+x = 10; // ReferenceError
+At the function level:
+
+
+function test() {
+    "use strict";
+    y = 20; // ReferenceError
+}
+test();
+Modules are strict by default:
+
+In JavaScript modules (.mjs or using type="module"), strict mode is automatically enabled.
+By understanding and using strict mode, you can write more robust, maintainable, and secure JavaScript code.

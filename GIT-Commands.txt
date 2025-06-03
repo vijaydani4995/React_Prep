@@ -1,0 +1,134 @@
+Basic Git Commands
+
+git init
+
+Initializes a new Git repository in the current directory.
+git clone <repository-url>
+
+Copies an existing remote repository to your local machine.
+git add <file> or git add .
+
+Stages changes in the specified file(s) or all files for the next commit.
+git commit -m "message"
+
+Records the staged changes in the repository with a descriptive message.
+git status
+
+Shows the status of changes in the working directory, including staged, unstaged, and untracked files.
+git log
+
+Displays the commit history of the repository.
+git diff
+
+Shows differences between the working directory, the staging area, and commits.
+Branching and Merging
+git branch
+
+Lists all branches in the repository. Use git branch <branch-name> to create a new branch.
+git checkout <branch-name>
+
+Switches to the specified branch.
+git checkout -b <branch-name>
+
+Creates and switches to a new branch.
+git merge <branch-name>
+
+Merges the specified branch into the current branch.
+git rebase <branch-name>
+
+Reapplies commits from the current branch on top of another branch.
+Remote Repository Commands
+git remote add origin <repository-url>
+
+Links the local repository to a remote repository.
+git pull
+
+Fetches and merges changes from the remote repository into the current branch.
+git push
+
+Pushes changes from the local repository to the remote repository.
+git fetch
+
+Downloads changes from the remote repository without merging them.
+
+Undoing Changes
+
+git reset <file>
+
+Unstages a file from the staging area.
+
+git reset --hard <commit-hash>
+
+Resets the working directory and staging area to a specific commit, discarding changes.
+git revert <commit-hash>
+
+Creates a new commit that undoes the changes from a specific commit.
+git stash
+
+Temporarily saves changes that are not ready to be committed.
+git stash apply
+
+Applies the most recent stashed changes without removing them from the stash list.
+Tagging
+git tag <tag-name>
+
+Creates a lightweight tag.
+git tag -a <tag-name> -m "message"
+
+Creates an annotated tag with a message.
+git push origin <tag-name>
+
+Pushes the specified tag to the remote repository.
+
+Collaboration and Troubleshooting.
+
+git pull --rebase
+
+Rebases the current branch on top of changes pulled from the remote repository.
+
+git cherry-pick <commit-hash>
+
+Applies a specific commit from another branch to the current branch.
+
+git blame <file>
+
+Shows who made each change in a file and when.
+git log --oneline
+
+Displays a compact log with one line per commit.
+git clean -f
+
+Removes untracked files from the working directory.
+Git Configuration
+git config --global user.name "<name>"
+
+Sets the global username.
+git config --global user.email "<email>"
+
+Sets the global email.
+git config --list
+
+Displays all the configuration settings.
+Advanced Commands
+git bisect
+
+Used to find a specific commit that introduced a bug.
+git reflog
+
+Shows the history of changes to the HEAD pointer, including detached heads and resets.
+git submodule
+
+Used to manage repositories inside another repository.
+Common Interview Scenarios
+How to resolve merge conflicts?
+
+Use git status to identify conflicts, manually edit the files, and then use git add <file> to mark conflicts as resolved.
+How to revert the last commit?
+
+Use git revert HEAD to undo the last commit by creating a new commit.
+How to squash commits?
+
+Use git rebase -i <base-branch> to interactively combine multiple commits into one.
+How to delete a branch?
+
+Use git branch -d <branch-name> for a local branch and git push origin --delete <branch-name> for a remote branch.

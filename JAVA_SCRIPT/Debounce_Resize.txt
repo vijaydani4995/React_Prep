@@ -1,0 +1,19 @@
+function debounce(func, delay) {
+    let timer; // To store the timeout ID
+    return function (...args) {
+        const context = this; // Preserve the context
+        clearTimeout(timer); // Clear the previous timer
+        timer = setTimeout(() => {
+            func.apply(context, args); // Call the function with the correct context and arguments
+        }, delay);
+    };
+}
+
+function handleResize() {
+    console.log("Resize event triggered! Width:", window.innerWidth);
+}
+
+const debouncedResize = debounce(handleResize, 300);
+
+// Add the debounced function as an event listener
+window.addEventListener("resize", debouncedResize);

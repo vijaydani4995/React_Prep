@@ -1,0 +1,101 @@
+Great question! These are fundamental concepts in JavaScript and React that often come up in interviews. Let’s break them down clearly:
+
+🔁 1. Higher-Order Function (HOF)
+✅ Definition:
+A Higher-Order Function is a function that either:
+
+Takes one or more functions as arguments, or
+
+Returns a function as its result.
+
+📘 Example:
+
+function greet(name) {
+  return `Hello, ${name}`;
+}
+
+function withLogging(fn) {
+  return function(...args) {
+    console.log("Calling function with:", args);
+    return fn(...args);
+  };
+}
+
+const loggedGreet = withLogging(greet);
+console.log(loggedGreet("Alice")); // Logs args and returns greeting
+🔼 2. Higher-Order Component (HOC) – React
+✅ Definition:
+A Higher-Order Component is a function that takes a component and returns a new component with enhanced behavior.
+
+📘 Example:
+jsx
+Copy
+Edit
+function withAuth(Component) {
+  return function EnhancedComponent(props) {
+    if (!props.isLoggedIn) {
+      return <div>Please log in</div>;
+    }
+    return <Component {...props} />;
+  };
+}
+
+// Usage
+const Profile = (props) => <div>Welcome, {props.name}</div>;
+const AuthenticatedProfile = withAuth(Profile);
+🧼 3. Pure Function
+✅ Definition:
+A Pure Function is a function that:
+
+Always returns the same output for the same input.
+
+Has no side effects (e.g., no modifying global state, no I/O, no DOM changes).
+
+📘 Example:
+js
+Copy
+Edit
+function add(a, b) {
+  return a + b; // Pure: no side effects, consistent output
+}
+🚫 Not pure:
+
+js
+Copy
+Edit
+let count = 0;
+function impureAdd(a) {
+  count++;
+  return a + count;
+}
+🧼 4. Pure Component – React
+✅ Definition:
+A Pure Component in React is a component that only re-renders when its props or state change. It does a shallow comparison of props and state.
+
+📘 Example:
+jsx
+Copy
+Edit
+import React, { PureComponent } from 'react';
+
+class MyPureComponent extends PureComponent {
+  render() {
+    return <div>{this.props.name}</div>;
+  }
+}
+OR using React.memo for function components:
+
+jsx
+Copy
+Edit
+const MyPureComponent = React.memo(({ name }) => {
+  return <div>{name}</div>;
+});
+✅ Summary Table
+Concept	Description	Example
+Higher-Order Function	Takes/returns another function	Array.map(), withLogging()
+Higher-Order Component	Takes a component, returns an enhanced component	withRouter(), connect()
+Pure Function	No side effects, same output for same input	add(a, b)
+Pure Component	React component with shallow prop/state comparison	React.PureComponent, React.memo()
+
+Let me know if you want to dive deeper into how HOCs or Pure Components are optimized for performance in React!

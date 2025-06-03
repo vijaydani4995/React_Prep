@@ -1,0 +1,107 @@
+1. Large Applications with Many Routes (Code Splitting)
+Use Case: Your application has multiple pages or features, and not all of them need to be loaded upfront.
+Why: To avoid bundling the code for all routes in the initial JavaScript payload.
+Example: Load a page component only when the user navigates to that route.
+Example with React Router:
+
+import React, { Suspense } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+const Home = React.lazy(() => import('./Home'));
+const About = React.lazy(() => import('./About'));
+
+function App() {
+  return (
+    <Router>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </Suspense>
+    </Router>
+  );
+}
+
+2.Conditional Rendering of Components
+Use Case: Components that are only displayed based on user interactions.
+Why: No need to load components the user might not use.
+Example: A modal or sidebar that opens after a button click.
+Example:
+
+jsx
+Copy code
+const Modal = React.lazy(() => import('./Modal'));
+
+function App() {
+  const [showModal, setShowModal] = React.useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setShowModal(true)}>Open Modal</button>
+      {showModal && (
+        <Suspense fallback={<div>Loading modal...</div>}>
+          <Modal />
+        </Suspense>
+      )}
+    </div>
+  );
+}
+4. Loading Images and Media
+Use Case: Your application has many high-resolution images or videos.
+Why: Loading all assets upfront can slow down the page. Instead, load them as users scroll.
+Example: Use libraries like react-lazyload or IntersectionObserver.
+Example with React Lazy Load:
+
+jsx
+Copy code
+import LazyLoad from 'react-lazyload';
+
+function App() {
+  return (
+    <div>
+      <LazyLoad height={200} once>
+        <img src="large-image.jpg" alt="Lazy loaded" />
+      </LazyLoad>
+    </div>
+  );
+}
+5. Mobile-First Applications
+Use Case: Mobile devices often have slower networks and limited resources.
+Why: Reduce the amount of data loaded initially to improve load time on mobile.
+6. Dashboard and Analytics Applications
+Use Case: Dashboards often contain multiple complex visualizations or charts.
+Why: Only load charts for the active tab or section.
+Example:
+
+
+const Chart = React.lazy(() => import('./Chart'));
+
+function Dashboard() {
+  return (
+    <Suspense fallback={<div>Loading chart...</div>}>
+      <Chart />
+    </Suspense>
+  );
+}
+7. E-commerce Applications
+Use Case: Product detail pages, reviews, or recommendations.
+Why: Load components and images as users browse different products rather than upfront.
+8. Progressive Web Applications (PWAs)
+Use Case: PWAs often need to work offline or on slow connections.
+Why: Lazy load non-critical components to ensure fast initial loading.
+9. When Using Third-Party Components
+Use Case: Components like maps (e.g., Google Maps) or animations (e.g., Lottie files).
+Why: These dependencies can be heavy and are often not critical for the first render.
+Example with Google Maps:
+
+
+const Map = React.lazy(() => import('./Map'));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading map...</div>}>
+      <Map />
+    </Suspense>
+  );
+}

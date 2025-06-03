@@ -1,0 +1,337 @@
+1. Basic Node.js Questions
+1. What is Node.js?
+Node.js is a runtime environment built on Chrome's V8 JavaScript engine that allows you to execute JavaScript on the server side. It's designed for building scalable network applications using an event-driven, non-blocking I/O model.
+
+2. How does Node.js differ from traditional server-side languages like PHP?
+Node.js uses an event-driven, non-blocking I/O model, which allows for handling many requests concurrently. Traditional
+server-side languages like PHP typically follow a multi-threaded, blocking I/O model, where each request is handled by a
+separate thread.
+
+3. What is an event loop in Node.js?
+The event loop is a mechanism that allows Node.js to perform non-blocking I/O operations by handling asynchronous callbacks. 
+It checks for I/O events and processes the callbacks from the event queue when they are available.
+
+4. Explain the concept of non-blocking I/O in Node.js.
+Non-blocking I/O allows the execution of tasks without waiting for I/O operations to complete. Instead of blocking the entire 
+thread for a resource, the operation is handled asynchronously, and a callback is invoked when it's done.
+
+5. What are the core modules in Node.js?
+Core modules are built-in modules that come with Node.js, such as:
+
+http: Used to create HTTP servers and handle requests.
+
+fs: For interacting with the file system.
+
+path: For handling file and directory paths.
+
+events: For handling events using EventEmitter.
+
+os: Provides information about the operating system.
+
+6. What is npm and what role does it play in Node.js?
+npm (Node Package Manager) is a package manager for Node.js. It is used to manage dependencies (libraries, tools) and provides access to a vast repository of open-source JavaScript packages.
+
+7. How do you install a package using npm?
+To install a package globally:
+
+bash
+Copy code
+npm install -g <package-name>
+To install a package locally (in your project):
+
+bash
+Copy code
+npm install <package-name>
+8. What are the differences between npm and yarn?
+
+Speed: Yarn is generally faster due to parallelized downloads.
+Lock Files: Both have lock files (package-lock.json for npm, yarn.lock for Yarn), but Yarn introduced the concept first.
+CLI Differences: They have some different commands and syntax.
+9. What is the purpose of package.json?
+package.json is a configuration file used to define project metadata, dependencies, scripts, and versions of the project.
+
+10. Explain the use of require vs. import in Node.js.
+
+require: CommonJS module system used in Node.js for importing modules (require('./module')).
+import: ES6 module system. It's more modern and allows static imports, but Node.js only supports it natively as of version 12+ with .mjs file extension or enabling the "type": "module" in package.json.
+2. Asynchronous Programming
+11. What are callbacks in Node.js?
+Callbacks are functions passed as arguments to other functions, which are executed once a task is completed.
+
+12. What is the "callback hell" and how do you avoid it?
+Callback hell refers to deeply nested callbacks that make code hard to read and maintain. It can be avoided using Promises, async/await, or by modularizing code.
+
+13. What are Promises in Node.js?
+Promises represent the eventual result of an asynchronous operation. They can be in one of three states: pending, fulfilled, or rejected.
+
+14. Explain async and await in Node.js.
+async is a function declaration that allows the use of await inside it. await pauses the execution of the function until the Promise is resolved or rejected,
+ making asynchronous code look synchronous.
+
+15. What is the purpose of process.nextTick() in Node.js?
+process.nextTick() defers the execution of a callback until the next iteration of the event loop, giving it higher priority over I/O operations.
+
+16. How does Node.js handle concurrency given that it is single-threaded?
+Node.js uses an event loop and non-blocking I/O to manage multiple connections concurrently on a single thread.
+
+17. What is Promise.all()? How is it different from Promise.any()?
+
+Promise.all(): Resolves when all Promises in the array resolve, and rejects if any promise rejects.
+Promise.any(): Resolves when any one of the Promises in the array resolves, and rejects only if all Promises reject.
+18. What is the difference between setImmediate() and process.nextTick()?
+
+setImmediate(): Executes after the current poll phase of the event loop.
+process.nextTick(): Executes immediately after the current operation, before the event loop resumes.
+19. What are streams in Node.js?
+Streams are objects that let you read/write data asynchronously in chunks rather than buffering the entire data set. There are four types: Readable, Writable, Duplex, and Transform.
+
+20. What are EventEmitters in Node.js?
+EventEmitters are a core part of the Node.js event system. They emit named events, and listeners (functions) respond to those events.
+
+3. File System and Buffers
+21. How do you read a file in Node.js?
+Using the fs.readFile() or fs.readFileSync() functions.
+
+22. How do you write a file in Node.js?
+Using the fs.writeFile() or fs.writeFileSync() functions.
+
+23. What is a buffer in Node.js?
+A buffer is a temporary storage area for a chunk of memory that handles binary data. It is used when dealing with raw data streams like file systems and network protocols.
+
+24. How do you convert a buffer to a string in Node.js?
+Using the toString() method:
+
+js
+Copy code
+buffer.toString('utf-8');
+25. What is the difference between fs.readFileSync and fs.readFile?
+
+fs.readFileSync: Synchronously reads a file, blocking the execution.
+fs.readFile: Asynchronously reads a file without blocking the event loop.
+4. HTTP and Express.js
+26. How do you create an HTTP server in Node.js?
+Using the http.createServer() method:
+
+
+const http = require('http');
+http.createServer((req, res) => {
+  res.write('Hello, World!');
+  res.end();
+}).listen(3000);
+
+27. What is Express.js?
+Express.js is a minimalist web framework for Node.js that simplifies routing, middleware management, and creating APIs.
+
+28. How do you handle routes in Express.js?
+Using the app.get(), app.post(), etc., methods:
+
+
+app.get('/', (req, res) => {
+  res.send('Hello, World!');
+});
+
+29. How do you handle middleware in Express.js?
+Middleware functions are functions that have access to the request, response, and next middleware function:
+
+
+app.use((req, res, next) => {
+  console.log('Request received');
+  next();
+});
+30. How do you handle errors in Express.js?
+By passing an error as the first argument to the error-handling middleware:
+
+js
+Copy code
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+31. What is the difference between app.use() and app.get() in Express?
+
+app.use(): Used to add middleware for all HTTP methods.
+app.get(): Used specifically for GET requests.
+32. How do you serve static files with Express.js?
+Using express.static():
+
+js
+Copy code
+app.use(express.static('public'));
+33. What is CORS and how do you enable it in Node.js?
+CORS (Cross-Origin Resource Sharing) allows restricted resources to be requested from another domain. You can enable it in Node.js by using the cors package:
+
+js
+Copy code
+const cors = require('cors');
+app.use(cors());
+34. How do you handle file uploads in Node.js (e.g., with Multer)?
+By using the Multer middleware:
+
+js
+Copy code
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+app.post('/upload', upload.single('file'), (req, res) => {
+  res.send('File uploaded!');
+});
+35. How do you create a RESTful API with Node.js and Express?
+By defining routes corresponding to CRUD operations:
+
+js
+Copy code
+app.get('/resource', getResource);
+app.post('/resource', createResource);
+app.put('/resource/:id', updateResource);
+app.delete('/resource/:id', deleteResource);
+5. Database and ORMs
+36. How do you connect Node.js to a database (e.g., MySQL, MongoDB)?
+For MySQL:
+
+
+const mysql = require('mysql')
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'user',
+  password: 'password',
+  database: 'db'
+});
+connection.connect()
+For MongoDB:
+
+js
+Copy code
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/mydb');
+37. What is Mongoose and how does it relate to MongoDB?
+Mongoose is an ODM (Object Data Modeling) library for MongoDB in Node.js. It provides a schema-based solution to model application data.
+
+38. Explain how connection pooling works in Node.js.
+Connection pooling allows multiple database requests to share a limited set of persistent database connections. It helps in reducing the overhead of creating new connections for each request.
+
+39. What is Sequelize, and how does it work in Node.js?
+Sequelize is an ORM for Node.js that supports SQL-based databases like MySQL, PostgreSQL, and SQLite. It allows you to define models, perform CRUD operations, and handle relations.
+
+40. How do you handle database transactions in Node.js?
+Transactions in databases like MySQL/PostgreSQL ensure a group of operations is executed successfully or rolled back if an error occurs. With Sequelize:
+
+js
+Copy code
+sequelize.transaction(async (t) => {
+  const user = await User.create({ name: 'Jane' }, { transaction: t });
+});
+6. Authentication and Security
+41. What is JWT (JSON Web Token) and how is it used in Node.js?
+JWT is a compact token format used for securely transmitting information between parties as a JSON object. It's commonly used in authentication systems:
+
+js
+Copy code
+const jwt = require('jsonwebtoken');
+const token = jwt.sign({ userId: 123 }, 'secretkey', { expiresIn: '1h' });
+42. How do you implement session management in Node.js?
+Using a session middleware like express-session:
+
+js
+Copy code
+const session = require('express-session');
+app.use(session({
+  secret: 'mysecret',
+  resave: false,
+  saveUninitialized: true
+}));
+43. How do you secure a Node.js application?
+
+Use helmet.js to secure HTTP headers.
+Use HTTPS.
+Sanitize inputs to prevent SQL injection and XSS.
+Encrypt sensitive data.
+44. What is the purpose of helmet.js in Node.js?
+helmet.js is a middleware that helps secure Node.js applications by setting various HTTP headers like Content-Security-Policy, X-Frame-Options, and X-XSS-Protection.
+
+45. How do you hash passwords in Node.js?
+You can hash passwords using bcrypt:
+
+js
+Copy code
+const bcrypt = require('bcrypt');
+const hashedPassword = bcrypt.hashSync('password', 10);
+7. Testing and Debugging
+46. How do you debug a Node.js application?
+You can use the built-in Node.js debugger or use console.log(). More advanced tools include Chrome DevTools or Visual Studio Code's built-in debugger.
+
+47. What is Mocha, and how is it used in testing Node.js applications?
+Mocha is a JavaScript test framework for Node.js that supports asynchronous testing:
+
+js
+Copy code
+const assert = require('assert');
+describe('Array', () => {
+  it('should return -1 when value is not present', () => {
+    assert.equal([1, 2, 3].indexOf(4), -1);
+  });
+});
+48. How do you write unit tests in Node.js?
+Using libraries like Mocha and Chai, you can write unit tests for individual functions and modules:
+
+js
+Copy code
+const { expect } = require('chai');
+describe('Function test', () => {
+  it('should return true', () => {
+    expect(myFunction()).to.be.true;
+  });
+});
+49. What is Sinon.js, and how do you use it for mocking and spying?
+Sinon.js is a library used for test spies, stubs, and mocks. It allows you to mock functions or objects in unit tests:
+
+js
+Copy code
+const sinon = require('sinon');
+const callback = sinon.spy();
+myFunction(callback);
+sinon.assert.calledOnce(callback);
+50. How do you handle exceptions in Node.js?
+Use try...catch blocks for synchronous code and .catch() for Promises. Global error handling can be done with process.on('uncaughtException') and process.on('unhandledRejection').
+
+
+How do you handle promises and async/await in JavaScript? Can you write a function to fetch data from multiple APIs in parallel and return the result when all are resolved?
+
+Concepts: Promises, async/await, error handling.
+
+javascript
+Copy code
+async function fetchAll(urls) {
+  try {
+    const results = await Promise.all(urls.map(url => fetch(url)));
+    return results;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+In Node.js, setImmediate() is a function used to schedule a callback to be executed in the next iteration of the event loop, after I/O events but 
+before any setTimeout or setInterval callbacks. It allows you to defer the execution of a function until the event loop is in the "check" phase
+
+console.log("Start");
+
+setTimeout(() => {
+  console.log("Timeout callback");
+}, 0);
+
+setImmediate(() => {
+  console.log("Immediate callback");
+});
+
+console.log("End");
+
+Start
+End
+Immediate callback
+Timeout callback
+
+
+
+
+
+
+

@@ -1,0 +1,299 @@
+✅ Node.js Core Concepts
+What is Node.js?
+
+Node.js is a runtime environment built on Chrome’s V8 JavaScript engine used to build scalable network applications using JavaScript.
+
+How does Node.js handle concurrency?
+
+Using an event loop and non-blocking I/O operations via a single-threaded event-driven architecture.
+
+What is the Event Loop in Node.js?
+
+A mechanism that handles async callbacks. It listens for events and executes the callback when the event is triggered.
+
+What is the difference between process.nextTick(), setImmediate(), and setTimeout()?
+
+process.nextTick() runs before the event loop continues.
+
+setImmediate() runs on the next iteration of the event loop.
+
+setTimeout() runs after at least the specified delay.
+
+Explain the difference between synchronous and asynchronous functions in Node.js.
+
+Synchronous blocks execution until it finishes; asynchronous doesn't block the event loop and uses callbacks/promises.
+
+What are Streams in Node.js?
+
+Streams are used to handle reading/writing of data efficiently. Types: Readable, Writable, Duplex, Transform.
+
+What is a Buffer in Node.js?
+
+Buffers are used to store binary data directly in memory when dealing with streams, TCP streams, etc.
+
+What is middleware in Express.js?
+
+Middleware is a function that has access to request, response, and next middleware in the application’s request-response cycle.
+
+What is the difference between require() and import?
+
+require() is CommonJS (used in Node), import is ES6 module syntax (now supported in Node with type: module).
+
+What is the purpose of package.json?
+
+Contains metadata about the project and handles dependencies, scripts, version, and more.
+
+✅ Asynchronous Programming & Promises
+What is a callback in Node.js?
+
+A function passed as an argument to another function, executed after the parent function completes.
+
+What are Promises in Node.js?
+
+Promises represent the eventual completion or failure of an async operation and its resulting value.
+
+What is async/await in Node.js?
+
+Syntactic sugar over Promises to write async code in a synchronous-like manner.
+
+How do you handle errors in async/await?
+
+Using try/catch blocks.
+
+How do you avoid callback hell?
+
+Using Promises, async/await, or modularizing code.
+
+✅ Modules & Dependency Management
+What is the difference between built-in, local, and third-party modules?
+
+Built-in: Provided by Node.js (e.g., fs, http), local: created by developers, third-party: installed via npm.
+
+How do you create a custom module in Node.js?
+
+js
+Copy
+Edit
+// add.js
+module.exports = function(a, b) { return a + b; }
+What is the use of exports and module.exports?
+
+exports is a shorthand for module.exports used to expose functions/objects from a module.
+
+What are peer dependencies in Node.js?
+
+Packages that the host package needs, but are expected to be installed at the root level.
+
+What is npx?
+
+npx is a package runner tool that comes with npm to execute binaries without installing them globally.
+
+✅ Express.js Framework
+What is Express.js?
+
+A fast, unopinionated web framework for Node.js to build APIs and web apps.
+
+How do you define routes in Express.js?
+
+js
+Copy
+Edit
+app.get('/users', (req, res) => { res.send('User List'); });
+What is the use of body-parser?
+
+Middleware to parse incoming request bodies in a middleware before handlers.
+
+How do you handle errors in Express.js?
+
+Using error-handling middleware: (err, req, res, next) => { }.
+
+How do you handle file uploads in Node.js?
+
+Using multer or busboy modules.
+
+✅ API & Middleware
+What are RESTful APIs?
+
+APIs that follow REST architectural constraints using standard HTTP methods.
+
+How do you secure REST APIs in Node.js?
+
+Use JWT, input validation, HTTPS, rate limiting, CORS, helmet, etc.
+
+What is CORS and how to handle it in Node.js?
+
+Cross-Origin Resource Sharing; use cors middleware in Express.
+
+What is Helmet in Express?
+
+A middleware to set secure HTTP headers for protection against vulnerabilities.
+
+What is the difference between PUT and PATCH?
+
+PUT replaces the entire resource, PATCH updates partial data.
+
+✅ Database Integration
+How do you connect Node.js with MongoDB?
+
+Using mongoose or native mongodb driver.
+
+How do you connect Node.js with MySQL?
+
+Using mysql2 or sequelize.
+
+What is Mongoose?
+
+ODM (Object Data Modeling) library for MongoDB and Node.js.
+
+How do you perform CRUD in MongoDB using Mongoose?
+
+.create(), .find(), .findByIdAndUpdate(), .deleteOne().
+
+What are schema and model in Mongoose?
+
+Schema defines structure, Model is a constructor compiled from the schema.
+
+✅ Testing and Debugging
+How do you debug a Node.js application?
+
+Using console.log(), node inspect, debugger, or VSCode debug tools.
+
+What are some testing libraries for Node.js?
+
+Mocha, Chai, Jest, Supertest.
+
+What is unit testing in Node.js?
+
+Testing individual units or functions in isolation.
+
+How do you test asynchronous code?
+
+Using done() callback or returning Promises/async functions.
+
+What is mocking and why is it useful in testing?
+
+Simulating modules/functions to isolate and test components independently.
+
+✅ Performance and Scaling
+How do you handle high load in Node.js?
+
+Using clustering, load balancing, caching, and efficient async code.
+
+What is clustering in Node.js?
+
+Running multiple instances of the app using cluster module to utilize multi-core CPUs.
+
+What is PM2?
+
+Advanced process manager for Node.js to manage and keep applications alive.
+
+How do you implement caching in Node.js?
+
+Using in-memory stores like Node-cache, or distributed cache like Redis.
+
+What is memory leak and how do you prevent it in Node.js?
+
+Unused memory not being garbage collected; prevented by profiling, limiting scope, and avoiding global variables.
+
+✅ Security & Best Practices
+How do you prevent SQL injection in Node.js?
+
+Use ORM/ODM or parameterized queries.
+
+How do you secure sensitive information in Node.js?
+
+Use environment variables (.env) and dotenv module.
+
+What is rate limiting and how is it done?
+
+Limiting requests from a user/IP to avoid abuse. Use express-rate-limit.
+
+What is a CSRF attack and how to prevent it?
+
+Cross-Site Request Forgery; prevent using tokens and libraries like csurf.
+
+What tools are used to lint and format code in Node.js?
+
+ESLint for linting, Prettier for formatting
+
+
+// ✅ Code-Based Examples and Scenario-Based Questions for Node.js (Experienced: 3–4 Years)
+
+// 1️⃣ Q: Write a middleware in Express.js to log the HTTP method and URL.
+const logger = (req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+};
+
+// 2️⃣ Q: Implement a route that fetches users from MongoDB using Mongoose.
+app.get('/users', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 3️⃣ Q: How do you handle file uploads in Node.js using multer?
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+app.post('/upload', upload.single('file'), (req, res) => {
+  res.send('File uploaded successfully');
+});
+
+// 4️⃣ Q: Create a route that reads a file asynchronously.
+const fs = require('fs');
+app.get('/read-file', (req, res) => {
+  fs.readFile('./data.txt', 'utf-8', (err, data) => {
+    if (err) return res.status(500).send('Error reading file');
+    res.send(data);
+  });
+});
+
+// 5️⃣ Q: Implement JWT authentication middleware.
+const jwt = require('jsonwebtoken');
+const auth = (req, res, next) => {
+  const token = req.header('Authorization');
+  if (!token) return res.status(401).send('Access denied');
+  try {
+    const verified = jwt.verify(token, 'secret');
+    req.user = verified;
+    next();
+  } catch (err) {
+    res.status(400).send('Invalid token');
+  }
+};
+
+// 6️⃣ Q: Simulate a delay using async/await.
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+app.get('/delay', async (req, res) => {
+  await delay(2000);
+  res.send('Waited 2 seconds');
+});
+
+// 7️⃣ Q: How would you handle global error in an Express app?
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+// 8️⃣ Scenario: Prevent too many requests to an API endpoint
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use('/api/', limiter);
+
+// 9️⃣ Scenario: Secure your Express app using Helmet
+const helmet = require('helmet');
+app.use(helmet());
+
+// 🔟 Scenario: Handle environment variables using dotenv
+require('dotenv').config();
+const dbPassword = process.env.DB_PASSWORD;
+
+// Continue with more scenario-based and practical examples if needed

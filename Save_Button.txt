@@ -1,0 +1,44 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const SaveButton = ({ projId, drCount, formData }) => {
+  const [loading, setLoading] = useState(false);
+
+  const checkDataExists = async () => {
+    try {
+      const res = await axios.get(`/api/checklist?proj_id=${projId}&dr_count=${drCount}`);
+      return res.data && res.data.length > 0; // adjust condition based on actual API response
+    } catch (error) {
+      console.error("Error checking data:", error);
+      return false;
+    }
+  };
+
+  const handleSave = async () => {
+    setLoading(true);
+    const exists = await checkDataExists();
+
+    try {
+      if (exists) {
+        await axios.put('/api/checklist', formData);
+        alert("Data updated successfully");
+      } else {
+        await axios.post('/api/checklist', formData);
+        alert("Data saved successfully");
+      }
+    } catch (error) {
+      console.error("Save failed:", error);
+      alert("An error occurred while saving.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button onClick={handleSave} disabled={loading}>
+      {loading ? "Saving..." : "Save"}
+    </button>
+  );
+};
+
+export default SaveButton;

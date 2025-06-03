@@ -1,0 +1,45 @@
+The apply, call, and bind methods in JavaScript are used to explicitly set the this value of a function. They differ in how they invoke the function and handle arguments.
+
+1. call:
+Invocation: Calls the function immediately.
+Arguments: Pass arguments individually.
+Syntax: func.call(thisArg, arg1, arg2, ...)
+Example:
+
+
+function greet(greeting, punctuation) {
+    console.log(`${greeting}, ${this.name}${punctuation}`);
+}
+
+const person = { name: 'Alice' };
+
+greet.call(person, 'Hello', '!'); // Output: "Hello, Alice!"
+2. apply:
+Invocation: Calls the function immediately.
+Arguments: Pass arguments as an array or array-like object.
+Syntax: func.apply(thisArg, [arg1, arg2, ...])
+Example:
+
+
+greet.apply(person, ['Hi', '.']); // Output: "Hi, Alice."
+3. bind:
+Invocation: Does not call the function immediately. Instead, it returns a new function with this bound to the provided value.
+Arguments: Pass arguments individually (can also be partially applied).
+Syntax: func.bind(thisArg, arg1, arg2, ...)
+Example:
+
+
+const boundGreet = greet.bind(person, 'Hey');
+boundGreet('!'); // Output: "Hey, Alice!"
+Key Differences:
+Feature	call	apply	bind
+Invocation	Immediate	Immediate	Delayed (returns a new function)
+Arguments	Passed individually	Passed as an array	Passed individually (can partially apply)
+Returns	Function's return value	Function's return value	New function
+Use these methods depending on whether you need immediate execution (call, apply) or to create a reusable function (bind). Choose apply when you already have arguments in an array.
+
+
+
+
+
+

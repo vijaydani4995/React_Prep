@@ -1,0 +1,6 @@
+1.Complete React Course(upto 150 videos)
+2.Coding questions on Array,puzzels,Datastructure,pattern printing(Leet Code,GeeksforGeeks)
+3.Build 2 to 3 end to end complete projects.
+4.Prepare introduction properly.
+5.Go throw all React interview questions asked in the previouse interviews.
+6.Go throw all basics JS/HTML/CSS/ES6

@@ -1,0 +1,272 @@
+### ✅ Basic TypeScript Questions
+
+**1. What is TypeScript and how is it different from JavaScript?**
+TypeScript is a strongly typed, object-oriented, compiled superset of JavaScript. It adds optional static typing, interfaces, and compile-time checking to JavaScript. TypeScript code is transpiled to JavaScript, which can run in any browser.
+
+**2. What are the advantages of using TypeScript?**
+
+* Static type checking
+* Early error detection
+* Better code editor support (IntelliSense, autocompletion)
+* Improved refactoring and code navigation
+* Interfaces and generics for better OOP design
+* Optional type annotations
+
+**3. What is the difference between any, unknown, never, and void?**
+
+* `any`: Turns off type checking for a variable.
+* `unknown`: Safer alternative to `any`; must be type-checked before usage.
+* `never`: Represents a value that never occurs (e.g., function that throws an error).
+* `void`: Used for functions that do not return a value.
+
+**4. What is type inference in TypeScript?**
+TypeScript automatically infers the type of a variable based on its value at assignment if no explicit type is given.
+
+```ts
+let message = "Hello"; // inferred as string
+```
+
+**5. How do interfaces differ from types in TypeScript?**
+
+* `interface` is used for defining object shapes and is extendable.
+* `type` can define primitives, unions, intersections, and tuples.
+* Interfaces are better for OOP-style object modeling.
+
+**6. What is enum in TypeScript? When should you use it?**
+An `enum` is a way to define named constants. It makes code more readable.
+
+```ts
+enum Direction {
+  Up,
+  Down,
+  Left,
+  Right
+}
+```
+
+Use enums when you have a fixed set of related constants.
+
+**7. What are type assertions in TypeScript? How are they different from type casting?**
+Type assertions tell the compiler to treat a variable as a specific type without actual data conversion.
+
+```ts
+let value: unknown = "hello";
+let strLength = (value as string).length;
+```
+
+It's different from type casting in other languages that involve runtime conversion.
+
+**8. What are union and intersection types? Provide examples.**
+
+* Union (`|`): A value can be one of several types.
+
+```ts
+let value: string | number;
+```
+
+* Intersection (`&`): A value must satisfy multiple types.
+
+```ts
+type A = { name: string };
+type B = { age: number };
+type Person = A & B;
+```
+
+**9. What are literal types and how are they useful?**
+Literal types restrict variables to exact values.
+
+```ts
+let direction: "up" | "down";
+```
+
+Useful in narrowing and enforcing strict value constraints.
+
+**10. What does the `as const` keyword do in TypeScript?**
+It makes an object or array and all its properties readonly and infers literal types.
+
+```ts
+const roles = ["admin", "user"] as const; // readonly ["admin", "user"]
+```
+
+---
+
+### ✅ Intermediate TypeScript Questions
+
+**11. What is the difference between interface and type? When should you use one over the other?**
+
+* Use `interface` for extending and implementing object shapes.
+* Use `type` for more complex compositions like union or tuple types.
+
+**12. What are optional properties and how do you define them?**
+Add a `?` to mark properties as optional:
+
+```ts
+interface User {
+  name: string;
+  age?: number;
+}
+```
+
+**13. How do you make properties in an interface or type readonly?**
+
+```ts
+interface Config {
+  readonly id: number;
+  name: string;
+}
+```
+
+**14. What are utility types? Can you explain Partial, Pick, Omit, Readonly, Record, etc.?**
+
+* `Partial<T>`: Makes all properties optional.
+* `Pick<T, K>`: Selects specific properties.
+* `Omit<T, K>`: Omits specific properties.
+* `Readonly<T>`: Makes all properties readonly.
+* `Record<K, T>`: Creates a type with keys `K` and values `T`.
+
+**15. What is keyof in TypeScript?**
+`keyof` returns the union of property names of a type.
+
+```ts
+type Person = { name: string, age: number };
+type PersonKeys = keyof Person; // 'name' | 'age'
+```
+
+**16. What is the typeof operator in a type context?**
+Used to get the type of a variable.
+
+```ts
+const user = { name: "Alice", age: 25 };
+type User = typeof user;
+```
+
+**17. Explain mapped types with an example.**
+Create new types by transforming properties:
+
+```ts
+type ReadOnly<T> = {
+  readonly [K in keyof T]: T[K];
+};
+```
+
+**18. How does TypeScript support generics? Provide examples.**
+Generics provide reusable components:
+
+```ts
+function identity<T>(arg: T): T {
+  return arg;
+}
+```
+
+**19. What are conditional types in TypeScript?**
+
+```ts
+type IsString<T> = T extends string ? true : false;
+```
+
+Types are selected based on conditions.
+
+**20. What is the difference between structural and nominal typing?**
+TypeScript uses **structural typing**: types are compatible if they have the same shape. Nominal typing requires explicit declarations, which TS lacks.
+
+---
+
+### ✅ Advanced/Practical Questions
+
+**21. How do you define and use a generic function or component?**
+
+```ts
+function wrapInArray<T>(value: T): T[] {
+  return [value];
+}
+```
+
+Used for reusable, type-safe logic.
+
+**22. What are declaration files (.d.ts) and when do you need them?**
+They contain only type definitions and allow JS libraries to be used with TS. Used when:
+
+* Using a JS lib without TypeScript support
+* Writing TS definition for third-party code
+
+**23. What is type narrowing and how does TypeScript perform it?**
+TypeScript narrows down union types based on conditions:
+
+```ts
+function print(val: string | number) {
+  if (typeof val === "string") {
+    console.log(val.toUpperCase());
+  }
+}
+```
+
+**24. Explain the concept of discriminated unions with an example.**
+
+```ts
+type Shape =
+  | { kind: "circle"; radius: number }
+  | { kind: "square"; side: number };
+
+function area(shape: Shape) {
+  switch (shape.kind) {
+    case "circle": return Math.PI * shape.radius ** 2;
+    case "square": return shape.side ** 2;
+  }
+}
+```
+
+**25. How do you handle third-party libraries that don’t have types?**
+
+* Install `@types/library-name` if available
+* Write a custom `.d.ts` file
+* Use `declare module 'lib-name'`
+
+**26. How can you create a custom utility type in TypeScript?**
+
+```ts
+type MyPartial<T> = {
+  [P in keyof T]?: T[P];
+};
+```
+
+**27. What are template literal types in TypeScript?**
+
+```ts
+type Role = "admin" | "user";
+type WelcomeMessage = `Welcome, ${Role}`;
+```
+
+Allows string manipulation at type level.
+
+**28. Explain the difference between unknown and any in TypeScript.**
+
+* `any`: Allows any operation (unsafe)
+* `unknown`: Must narrow type before use (safe)
+
+**29. What are some best practices you follow while writing TypeScript code?**
+
+* Enable `strict` mode in `tsconfig`
+* Prefer `unknown` over `any`
+* Use interfaces/types consistently
+* Avoid redundant type annotations
+* Use utility types
+
+**30. How do you configure TypeScript in a React or Node project (tsconfig.json)?**
+Common `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "outDir": "dist"
+  },
+  "include": ["src"]
+}
+```
+
+Adjust `jsx` and `module` options for React/Node as needed.

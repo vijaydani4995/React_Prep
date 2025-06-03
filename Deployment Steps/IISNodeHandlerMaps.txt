@@ -1,0 +1,42 @@
+Steps to Check if iisnode Handler is Mapped:
+Open IIS Manager:
+
+Press Windows + R, type inetmgr, and press Enter to open the IIS Manager.
+Navigate to Your Website:
+
+In the left-hand panel (Connections), expand the Sites node.
+Click on your website (the one hosting your Node.js app).
+Check Handler Mappings:
+
+In the center panel, double-click on Handler Mappings.
+Look for a handler mapping for .js files.
+The handler should point to the iisnode module. It typically looks like this:
+yaml
+
+Request path: *.js
+Executable: %programfiles%\iisnode\iisnode.dll
+If iisnode Handler is Not Present:
+Add a New Handler Mapping:
+
+In the Handler Mappings section, click on Add Module Mapping on the right panel.
+Configure the Handler:
+
+Request Path: *.js
+Module: Choose iisnode from the list. If iisnode is not present, you may need to reinstall the iisnode module.
+Executable: Enter the path to iisnode.dll. Usually, this is located at:
+shell
+
+%programfiles%\iisnode\iisnode.dll
+Name: You can give it a descriptive name like iisnode.
+Apply the Changes:
+
+Click OK to save the mapping.
+Restart IIS:
+
+In IIS Manager, click Restart in the right panel to apply the changes.
+This will map all .js files to be handled by the iisnode module, allowing Node.js applications to run under IIS.
+
+Additional Notes:
+If iisnode.dll is missing, ensure that iisnode is installed. You can download it from iisnode GitHub or through a package manager like choco if you are using Chocolatey:
+Copy code
+choco install iisnode

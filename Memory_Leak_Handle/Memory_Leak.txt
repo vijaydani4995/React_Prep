@@ -1,0 +1,102 @@
+Memory leaks in React can occur when components retain references to resources (like timers, event listeners, subscriptions, or network requests) even after they've unmounted. These leaks cause unnecessary memory usage and performance issues.
+
+✅ How to Handle Memory Leaks in React
+1. Cleanup in useEffect
+When using side effects, always return a cleanup function to cancel or remove them when the component unmounts.
+
+🧪 Scenario 1: Network Requests
+
+useEffect(() => {
+  const controller = new AbortController();
+
+  fetch("/api/data", { signal: controller.signal })
+    .then(res => res.json())
+    .then(setData)
+    .catch(err => {
+      if (err.name !== "AbortError") {
+        console.error(err);
+      }
+    });
+
+  return () => {
+    controller.abort(); // 👈 Prevent memory leak
+  };
+}, []);
+2. Clearing setInterval or setTimeout
+🧪 Scenario 2: Timers
+
+useEffect(() => {
+  const timer = setInterval(() => {
+    console.log("Timer running");
+  }, 1000);
+
+  return () => clearInterval(timer); // 👈 Cleanup
+}, []);
+3. Unsubscribing from Event Listeners
+🧪 Scenario 3: DOM Event Listeners
+
+useEffect(() => {
+  const handleScroll = () => console.log("Scrolling...");
+
+  window.addEventListener("scroll", handleScroll);
+
+  return () => window.removeEventListener("scroll", handleScroll); // 👈 Prevent leak
+}, []);
+4. WebSocket / Third-Party Subscriptions
+🧪 Scenario 4: WebSocket
+
+useEffect(() => {
+  const socket = new WebSocket("wss://example.com");
+
+  socket.onmessage = (event) => {
+    console.log("Message", event.data);
+  };
+
+  return () => socket.close(); // 👈 Close socket on unmount
+}, []);
+5. Cancelling Promises (when using third-party libraries)
+Libraries like Axios don’t cancel requests by default — use cancel tokens or AbortController.
+
+🧪 Scenario 5: Axios Request
+
+import axios from "axios";
+
+useEffect(() => {
+  const source = axios.CancelToken.source();
+
+  axios.get("/api/data", { cancelToken: source.token })
+    .then(res => setData(res.data))
+    .catch(err => {
+      if (axios.isCancel(err)) {
+        console.log("Request canceled", err.message);
+      }
+    });
+
+  return () => source.cancel("Component unmounted"); // 👈 Cancel request
+}, []);
+6. Memory Leaks from State Updates on Unmounted Components
+React warns you if you try to update state after a component is unmounted.
+
+🧪 Scenario 6: Avoid setting state after unmount
+
+useEffect(() => {
+  let isMounted = true;
+
+  fetchData().then(data => {
+    if (isMounted) {
+      setData(data); // 👈 Only set state if mounted
+    }
+  });
+
+  return () => {
+    isMounted = false;
+  };
+}, []);
+🛠️ Best Practices to Avoid Memory Leaks
+Practice	                                                 Benefit
+Use AbortController or Axios cancel tokens	                 Cancel requests on unmount
+Always return cleanup in useEffect	                         Clears timers, listeners, etc.
+Track if component is mounted	                             Prevent invalid setState calls
+Avoid long-running effects	                                 Keeps UI responsive and memory-efficient
+Use React.StrictMode in dev	                                 Helps detect unsafe lifecycles
+

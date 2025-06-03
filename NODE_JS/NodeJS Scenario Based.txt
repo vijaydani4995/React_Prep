@@ -1,0 +1,151 @@
+Node.js Scenario-Based Questions
+File Handling and Performance
+
+Scenario: You are tasked to read a large file and process its data line by line. How would you handle this efficiently in Node.js to avoid blocking the event loop?
+Expected Answer: Use fs.createReadStream to stream the file and process it in chunks using the data event. Libraries like readline or stream.Transform can be used for line-by-line processing.
+Error Handling
+
+To efficiently process a large file line by line in Node.js without blocking the event loop, you can use streaming. Node.js's fs module provides a createReadStream function to read files in chunks, and you can combine it with the readline module to process the file line by line.
+
+Here’s how you can handle it:
+
+Code Implementation
+javascript
+Copy code
+const fs = require('fs');
+const readline = require('readline');
+
+async function processFile(filePath) {
+    try {
+        // Create a readable stream
+        const fileStream = fs.createReadStream(filePath);
+
+        // Use readline to process the file line by line
+        const rl = readline.createInterface({
+            input: fileStream,
+            crlfDelay: Infinity // Handle all newline types
+        });
+
+        // Process each line asynchronously
+        for await (const line of rl) {
+            console.log(`Processing line: ${line}`);
+            // Add your processing logic here
+        }
+
+        console.log('File processing completed.');
+    } catch (error) {
+        console.error('Error processing file:', error);
+    }
+}
+
+// Call the function with the file path
+processFile('path/to/large/file.txt');
+How It Works
+fs.createReadStream:
+
+Reads the file in chunks instead of loading the entire file into memory.
+Prevents memory overload for large files.
+readline.createInterface:
+
+Processes the stream line by line.
+Automatically buffers each line until a newline character is encountered.
+for await...of:
+
+Reads each line asynchronously, ensuring the event loop is not blocked.
+Benefits
+Memory Efficient: Only small chunks of the file are loaded into memory at any time.
+Non-Blocking: The use of asynchronous iterators ensures that the event loop can handle other tasks concurrently.
+Scalable: Handles large files without performance degradation.
+Advanced Use Cases
+If you need to pause or resume processing based on external conditions, you can control the readline or stream manually.
+To handle errors for specific lines, you can wrap the processing logic inside a try...catch block within the loop.
+If multiple lines need to be processed concurrently, you can use a queue system (e.g., async library or Bull) for controlled parallel processing.
+
+Scenario: A function in your Node.js application makes an HTTP request to an external API. Sometimes, the API fails, and your application crashes. How will you handle such errors?
+Expected Answer: Use try...catch for synchronous code or .catch() for Promises. Implement retries using libraries like axios-retry or node-fetch-retry for robustness.
+Concurrency
+
+const fetch = require('node-fetch');
+
+async function fetchWithRetry(url, retries = 3, delay = 1000) {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                console.error(`Attempt ${attempt}: Error Code: ${response.status}`);
+                if (attempt === retries) throw new Error('Max retries reached');
+            } else {
+                const data = await response.json();
+                console.log('Data:', data);
+                return data; // Exit on success
+            }
+        } catch (error) {
+            console.error(`Attempt ${attempt}: Request Error: ${error.message}`);
+            if (attempt === retries) throw error; // Re-throw if max retries reached
+        }
+
+        // Wait before retrying
+        await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+}
+
+// Test the function
+fetchWithRetry('https://api.example.com/nonexistent');
+
+
+Scenario: You need to handle 10,000 parallel incoming requests to a Node.js server. How will you ensure the server doesn’t crash or slow down excessively?
+Expected Answer: Implement load balancing using clustering (cluster module) or PM2. Use a queuing mechanism like Bull or RabbitMQ for managing high loads.
+Database Connection Management
+
+Scenario: You are connecting to a database using a Node.js application, but it sometimes throws a "too many connections" error. How will you address this?
+Expected Answer: Use connection pooling to limit the number of concurrent connections. Libraries like mysql2 or pg support pooling configurations.
+Express.js Scenario-Based Questions
+Middleware Usage
+
+Scenario: You want to log the details of all incoming requests (method, URL, time) and also validate authentication for certain routes. How would you achieve this in Express?
+Expected Answer: Use custom middleware for logging (app.use) and authentication. Separate concerns by applying specific middleware to route groups.
+Error Handling
+
+Scenario: How would you set up a global error handler in Express that catches all errors and sends a standardized JSON response?
+Expected Answer: Use an error-handling middleware function with four arguments (err, req, res, next). Ensure all routes forward errors using next(err).
+Static File Serving
+
+Scenario: You want to serve static files (images, CSS, JavaScript) from a folder named public. How would you implement this?
+Expected Answer: Use the express.static middleware like this:
+javascript
+Copy code
+app.use(express.static('public'));
+Route Optimization
+
+Scenario: You have multiple routes for fetching data (/api/users, /api/products, etc.), and you want to modularize them. How would you do this?
+Expected Answer: Use the express.Router module to separate route handlers into individual files for better maintainability.
+Microservices Scenario-Based Questions
+Service Communication
+
+Scenario: Two microservices need to communicate—one is written in Node.js and the other in Python. What methods can you use for communication?
+Expected Answer: Use REST APIs, GraphQL, or message brokers like RabbitMQ, Kafka, or Redis Pub/Sub for asynchronous communication.
+Service Discovery
+
+Scenario: In a microservices architecture, you need a way for services to discover each other dynamically. How will you implement this?
+Expected Answer: Use a service registry like Consul, Eureka, or etcd. Alternatively, cloud-native tools like AWS App Mesh or Kubernetes DNS can help.
+Data Consistency
+
+Scenario: One service updates a database record, and another service needs to be notified of the change. How will you ensure consistency?
+Expected Answer: Use event-driven architecture with tools like Kafka or RabbitMQ to publish changes. Implement eventual consistency through event sourcing or the Saga pattern.
+Scaling
+
+Scenario: A single microservice is facing a spike in traffic, and the performance is degrading. What steps would you take to scale it effectively?
+Expected Answer: Use horizontal scaling with container orchestration tools like Kubernetes. Implement auto-scaling policies and load balancing.
+Security
+
+Scenario: How would you secure communication between two microservices?
+Expected Answer: Use TLS for encryption, API Gateway for centralized access control, and OAuth2 for service-to-service authentication.
+Rate Limiting
+
+Scenario: One of your microservices is being spammed with requests, leading to degraded performance. How would you implement rate limiting?
+Expected Answer: Use libraries like express-rate-limit in Node.js or employ API Gateway with built-in rate-limiting features (e.g., AWS API Gateway).
+Failure Handling
+
+Scenario: One microservice is down, but other services are still dependent on it. How will you handle this?
+Expected Answer: Use circuit breakers (e.g., opossum library in Node.js), fallback strategies, and retries with exponential backoff.

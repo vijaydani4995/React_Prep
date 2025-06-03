@@ -1,0 +1,58 @@
+app.post('/api/saveBulkResponses3', (req, res) => {
+    const { responses } = req.body;
+
+    if (!responses || responses.length === 0) {
+        return res.status(400).json({ message: "No responses provided" });
+    }
+
+    const proj_id = responses[0].proj_id;
+    const dr_count = responses[0].dr_count;
+    const prev_dr_count = dr_count - 1;
+
+    // Step 1: Get question_ids from previous DR milestone
+    const prevQuery = `
+      SELECT question_id FROM data
+      WHERE proj_id = ? AND dr_count = ?
+    `;
+
+    connection.query(prevQuery, [proj_id, prev_dr_count], (err, prevRows) => {
+        if (err) {
+            console.error("Error checking previous data:", err);
+            return res.status(500).json({ message: "Failed to fetch previous DR data" });
+        }
+
+        const prevQuestionIds = new Set(prevRows.map(r => r.question_id));
+
+        // Step 2: Filter only new questions not in previous DR
+        const newResponses = responses.filter(row => !prevQuestionIds.has(row.question_id));
+
+        if (newResponses.length === 0) {
+            return res.status(200).json({ message: "No new responses to insert" });
+        }
+
+        const values = newResponses.map((row) => [
+            row.question_id,
+            row.proj_id,
+            row.dr_count,
+            row.projectMemberCheck,
+            row.reviewerCheck,
+            row.remarks,
+        ]);
+
+        const insertQuery = `
+          INSERT INTO data (
+            question_id, proj_id, dr_count,
+            projectMemberCheck, reviewerCheck, remarks
+          ) VALUES ?
+        `;
+
+        connection.query(insertQuery, [values], (insertErr, result) => {
+            if (insertErr) {
+                console.error("Bulk insert failed:", insertErr);
+                return res.status(500).json({ message: "Bulk insert failed" });
+            }
+
+            res.status(200).json({ message: "New responses inserted successfully", inserted: newResponses.length });
+        });
+    });
+});

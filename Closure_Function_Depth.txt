@@ -1,0 +1,98 @@
+🔥 Advanced Closure Interview Questions
+1. What is a closure and how is it created in JavaScript?
+✅ Expected: Explain how inner functions retain access to variables from their lexical scope, even after the outer function has returned.
+
+2. Why are closures useful? Can you give real-world examples?
+✅ Examples:
+
+Data encapsulation / private variables
+
+Event handlers
+
+Memoization / caching
+
+setTimeout/setInterval callbacks
+
+Currying
+
+3. What problems can closures cause in loops? How can you fix them?
+Example question:
+
+js
+Copy
+Edit
+for (var i = 0; i < 3; i++) {
+  setTimeout(function () {
+    console.log(i);
+  }, 1000);
+}
+❌ Output: 3, 3, 3
+
+✅ Fix using let or IIFE:
+
+js
+Copy
+Edit
+for (let i = 0; i < 3; i++) {
+  setTimeout(function () {
+    console.log(i);
+  }, 1000);
+}
+4. Explain how closures can lead to memory leaks and how to prevent it.
+✅ Closures keep variables in memory longer than needed if not managed well.
+
+🛠️ Solution: Null out references, avoid unnecessary global closures, use tools like Chrome DevTools to detect retained memory.
+
+5. What is the difference between closure and scope?
+✅ Scope defines where variables are accessible.
+
+✅ Closure is created when an inner function remembers variables from an outer function, even after that function finishes execution.
+
+6. Create a counter using closures that can increment, decrement, and reset.
+js
+Copy
+Edit
+function createCounter() {
+  let count = 0;
+  return {
+    increment: () => ++count,
+    decrement: () => --count,
+    reset: () => { count = 0; return count; }
+  };
+}
+
+const counter = createCounter();
+console.log(counter.increment()); // 1
+console.log(counter.increment()); // 2
+console.log(counter.decrement()); // 1
+console.log(counter.reset());     // 0
+7. Can closures replace classes or modules in JavaScript?
+✅ Yes, closures can simulate private methods/properties like in the Module Pattern.
+
+🆚 Classes use prototypal inheritance, closures use lexical scoping.
+
+8. What's the difference between closure and IIFE (Immediately Invoked Function Expression)?
+✅ IIFE is a way to create a private scope immediately.
+
+✅ Closures are a concept; IIFE can use closures but isn't a closure itself.
+
+9. How do closures behave in asynchronous functions like setTimeout or Promises?
+Test understanding of event loop, lexical environment, and how closures capture the correct variable at the time of declaration, not execution.
+
+10. Can you memoize a function using closures?
+✅ Demonstrates use of closure to cache previous results.
+
+js
+Copy
+Edit
+function memoize(fn) {
+  const cache = {};
+  return function(x) {
+    if (cache[x]) return cache[x];
+    return (cache[x] = fn(x));
+  };
+}
+
+const square = memoize(x => x * x);
+console.log(square(4)); // 16 (calculated)
+console.log(square(4)); // 16 (cached)

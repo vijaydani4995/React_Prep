@@ -1,0 +1,197 @@
+Basic Questions
+What is IIS, and what is it used for?
+
+IIS is a web server software developed by Microsoft for hosting websites and web applications. It supports HTTP, HTTPS, FTP, SMTP, and more.
+What are the key features of IIS?
+
+Features include:
+Application pools
+Security (SSL, authentication, etc.)
+Logging and diagnostics
+URL rewriting
+Request filtering
+Load balancing
+Which protocols are supported by IIS?
+
+HTTP, HTTPS, FTP, FTPS, SMTP, NNTP, WebSocket.
+How do you install IIS on a Windows Server?
+
+Via Server Manager:
+Open Server Manager.
+Click Add Roles and Features.
+Select Web Server (IIS).
+Follow the prompts to install.
+What is an application pool in IIS? Why is it important?
+
+An application pool isolates web applications, ensuring that if one crashes, others are unaffected. It provides better security, performance, and scalability.
+Intermediate Questions
+What is the default port for IIS, and can it be changed?
+
+Default port: 80 for HTTP and 443 for HTTPS.
+It can be changed in the binding settings of a site.
+How do you host multiple websites on a single IIS server?
+
+By using:
+Host headers (different domain names).
+Different ports.
+Different IP addresses.
+What is the difference between an IIS site and a virtual directory?
+
+IIS Site: Represents a full website, with its own bindings and settings.
+Virtual Directory: A directory in a site that points to a folder on a disk, potentially on another server.
+What is the significance of the web.config file in IIS?
+
+Contains configuration settings for ASP.NET applications, such as:
+Authentication modes.
+Custom error pages.
+Connection strings.
+How can you configure HTTPS on IIS?
+
+Steps:
+Obtain an SSL certificate.
+Install the SSL certificate on the server.
+Bind the site to HTTPS in IIS and assign the certificate.
+How do you enable logging in IIS?
+
+Go to the site settings in IIS:
+Logging > Enable > Set log file location and format.
+What are IIS bindings, and what types are available?
+
+Bindings link a site to a combination of IP address, port, and hostname. Types include:
+HTTP
+HTTPS
+FTP
+What is worker process recycling in IIS?
+
+Automatically restarts the application pool's worker process to free up resources or apply new configurations. Can be scheduled or triggered by memory limits.
+Advanced Questions
+How do you troubleshoot a 500 Internal Server Error in IIS?
+
+Check:
+IIS logs (stored in C:\inetpub\logs).
+Failed Request Tracing (enable it in IIS).
+Event Viewer for system/application errors.
+Application code for unhandled exceptions.
+What is the difference between classic mode and integrated mode in IIS application pools?
+
+Classic Mode: Handles requests using the legacy ISAPI model.
+Integrated Mode: Integrates with the ASP.NET pipeline for better performance and extensibility.
+How do you configure load balancing in IIS?
+
+Use the Web Farm Framework or external tools like a hardware load balancer, Azure Traffic Manager, or ARR (Application Request Routing).
+What is IIS URL Rewrite? Why is it used?
+
+The URL Rewrite module allows you to redirect or rewrite URLs. Useful for:
+SEO-friendly URLs.
+Redirecting HTTP to HTTPS.
+Removing query strings.
+What are common security settings in IIS?
+
+Enabling SSL/TLS.
+Configuring authentication (Basic, Windows, etc.).
+Request filtering (to block malicious requests).
+Disabling unused modules.
+Setting permissions for files and directories.
+What is ARR (Application Request Routing) in IIS?
+
+A module used for reverse proxy and load balancing.
+How do you deploy a web application to IIS?
+
+Methods:
+Manual copy and configuration.
+Using Web Deploy.
+Via PowerShell scripts.
+What are IIS Modules? Can you name some?
+
+IIS Modules extend the functionality of the server. Examples:
+Static Content
+HTTP Redirect
+Request Filtering
+URL Rewrite
+Output Caching
+How can you improve the performance of a site hosted in IIS?
+
+Techniques:
+Enable output caching.
+Compress responses using gzip or brotli.
+Optimize application pool recycling.
+Use static content compression.
+Reduce logging verbosity in production.
+How does IIS handle authentication?
+
+IIS supports:
+Anonymous Authentication.
+Basic Authentication.
+Windows Authentication.
+Forms Authentication (via web applications).
+What is the difference between IIS Express and IIS?
+
+IIS Express:
+Lightweight and used for local development.
+Runs under a user account.
+IIS:
+Full-featured, used for production hosting.
+Runs as a service under the system account.
+What are application pool identities, and why are they important?
+
+Application pool identities are user accounts under which the application pool's worker process runs. They provide isolation and enhance security.
+Scenario-Based Questions
+A website hosted in IIS is slow. How do you troubleshoot? 
+
+Check:
+Server resource usage (CPU, RAM).
+IIS logs and Failed Request Tracing.
+Application performance (database queries, code bottlenecks).
+Network latency.
+A website works on HTTP but not HTTPS. What could be the issue?
+
+Possible causes:
+SSL certificate not installed or expired.
+HTTPS binding missing or misconfigured.
+Firewall blocking port 443.
+How do you deploy multiple versions of an application in IIS?
+
+Create separate application pools and sites for each version.
+How would you migrate an IIS website to another server?
+
+Steps:
+Export the site configuration using appcmd or PowerShell.
+Backup content files.
+Import configuration and restore files on the new server.
+
+
+1. Site
+Definition:
+A site represents a collection of web applications and their associated content. It is what clients access via a browser.
+
+Purpose:
+Hosts websites and handles incoming HTTP/HTTPS requests.
+
+Key Characteristics:
+
+Each site is identified by a unique combination of IP address, port, and host header (bindings).
+Contains one or more applications, including the root application.
+The root of a site points to a physical directory on the file system (e.g., C:\inetpub\wwwroot).
+A site can use a single or multiple application pools for its applications.
+Example:
+
+Default Website: The default site in IIS with content stored in C:\inetpub\wwwroot.
+
+
+
+2. Application Pool
+Definition:
+An application pool is a container that isolates web applications. It provides a worker process (w3wp.exe) to handle the requests for those applications.
+
+Purpose:
+Ensures isolation and manages resources like memory, CPU, and security for web applications.
+
+Key Characteristics:
+
+Multiple sites or applications can share the same application pool, or each site/application can have its own application pool.
+Provides better performance, scalability, and security by isolating applications in separate worker processes.
+Applications in one application pool do not affect those in another (e.g., if one crashes, others remain unaffected).
+Example:
+
+An application pool named AppPool1 running an e-commerce application.
+

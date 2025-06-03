@@ -1,0 +1,75 @@
+✅ 1. Project Architecture & Design
+How have you structured your React project in your current/last company?
+
+What state management libraries have you used? Why did you choose them (Redux, Zustand, Context API, Recoil)?
+
+How do you manage folder structure for scalability and maintainability in a large React app?
+
+Explain how you implemented routing in your project. Did you use code splitting with React Router?
+
+✅ 2. Real-Time Features
+Have you worked with WebSockets or Server-Sent Events (SSE)? How did you manage real-time updates in React?
+
+Explain how you implemented polling or push notification features.
+
+✅ 3. Performance Optimization
+How do you optimize performance in large React applications?
+
+Explain use of React.memo, useMemo, useCallback in your project with examples.
+
+Have you used lazy loading or dynamic imports in your application?
+
+✅ 4. Handling Side Effects and Async Operations
+How do you handle API calls in React?
+
+Explain a scenario where you used useEffect to manage subscriptions or cleanups.
+
+How did you handle race conditions or memory leaks during unmounted API calls?
+
+✅ 5. Reusability & Component Design
+How do you design reusable components in your project?
+
+Have you created higher-order components or custom hooks? Give an example.
+
+How do you manage component composition and prop drilling?
+
+✅ 6. Forms & Validation
+How have you handled complex form validation in your project (Formik, React Hook Form)?
+
+Did you implement dynamic forms based on user input or API response?
+
+✅ 7. State Management
+How did you manage global state in a large app?
+
+Explain a real-time use case where you used Redux Toolkit or Context API.
+
+How do you handle optimistic UI updates?
+
+✅ 8. Security & Authentication
+How did you implement authentication and authorization in your React project?
+
+How did you handle token refresh, access control, and protected routes?
+
+✅ 9. Testing
+Have you written unit or integration tests in React? What libraries did you use (Jest, React Testing Library)?
+
+How did you mock APIs and test async code?
+
+✅ 10. Deployment & DevOps
+How is your React app deployed in production? CI/CD process?
+
+Have you used tools like Docker, Vite, Webpack, or any cloud platform like AWS S3 + CloudFront?
+
+✅ 11. Team Collaboration & Versioning
+How do you manage feature branches and pull requests in a team setting?
+
+Have you used storybook or design systems to collaborate with designers?
+
+🧪 Bonus Real-Time Scenario Questions
+"You notice a React app has a slow initial load time. What would be your approach to fix it?"
+
+"A user reports the app freezes when typing in a large input field. How would you debug and solve it?"
+
+"You’re asked to internationalize your existing React app. How would you approach it?"
+
+"A client wants offline support in a React PWA. How would you build it?"

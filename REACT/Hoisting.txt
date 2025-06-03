@@ -1,0 +1,99 @@
+What is Hoisting in JavaScript?
+Hoisting is JavaScript's default behavior of moving declarations to the top of their scope (global or function) during the compilation phase. However, only the declarations are hoisted, not the initializations or assignments. This applies differently to variables and functions.
+
+1. Hoisting with Variables
+Variables in JavaScript can be declared using var, let, or const. The behavior of hoisting depends on which keyword is used.
+
+a. Variables Declared with var
+var declarations are hoisted to the top of their scope and initialized to undefined.
+You can access the variable before its declaration without an error, but the value will be undefined.
+Example:
+
+console.log(x); // undefined (hoisted declaration, but not the initialization)
+var x = 10;
+console.log(x); // 10
+Here’s how the code is interpreted by the JavaScript engine:
+
+
+var x;        // Declaration is hoisted
+console.log(x); // undefined
+x = 10;       // Initialization stays in place
+console.log(x); // 10
+b. Variables Declared with let or const
+let and const declarations are also hoisted, but they are not initialized.
+These variables exist in a Temporal Dead Zone (TDZ) from the start of their scope until their declaration is encountered.
+Accessing them before declaration results in a ReferenceError.
+Example with let:
+
+console.log(y); // ReferenceError: Cannot access 'y' before initialization
+let y = 20;
+Example with const:
+javascript
+Copy code
+console.log(z); // ReferenceError: Cannot access 'z' before initialization
+const z = 30;
+2. Hoisting with Functions
+Hoisting for functions depends on how they are defined:
+
+a. Function Declarations
+Function declarations are fully hoisted, meaning both their name and body are moved to the top of their scope.
+You can call the function before its declaration in the code.
+Example:
+
+greet(); // "Hello, world!"
+
+function greet() {
+  console.log("Hello, world!");
+}
+The JavaScript engine interprets this as:
+
+
+function greet() { // Entire function declaration is hoisted
+  console.log("Hello, world!");
+}
+
+greet(); // "Hello, world!"
+b. Function Expressions (with var, let, or const)
+Function expressions are treated like variables:
+
+Only the variable declaration is hoisted, not the function definition.
+If the function is assigned to a var, it will be undefined if called before its definition.
+With let or const, accessing the variable before its declaration causes a ReferenceError.
+Example with var:
+javascript
+Copy code
+console.log(sayHello); // undefined
+sayHello(); // TypeError: sayHello is not a function
+
+var sayHello = function () {
+  console.log("Hi!");
+};
+Example with let or const:
+javascript
+Copy code
+console.log(sayHi); // ReferenceError: Cannot access 'sayHi' before initialization
+let sayHi = function () {
+  console.log("Hi!");
+};
+3. Arrow Functions
+Arrow functions behave like function expressions because they are assigned to a variable.
+
+Example:
+javascript
+Copy code
+console.log(add); // ReferenceError: Cannot access 'add' before initialization
+const add = (a, b) => a + b;
+4. Summary of Hoisting
+Type	Hoisted?	Initialized?	Access Before Declaration?
+var	Yes	Initialized to undefined	Yes, but value will be undefined.
+let	Yes	No	No, results in ReferenceError.
+const	Yes	No	No, results in ReferenceError.
+Function Declarations	Yes (Fully)	Yes (Body is hoisted)	Yes, callable before declaration.
+Function Expressions	Partially	No (Only variable hoisted)	No, depends on the variable's behavior (var, let, or const).
+Arrow Functions	Partially	No	No, behaves like let or const.
+5. Key Takeaways
+Declarations are hoisted: Variable declarations and function declarations are moved to the top of their scope during the compile phase.
+Initializations are not hoisted: Only the declaration is moved, but the assignment or initialization stays in place.
+Temporal Dead Zone (TDZ): let and const variables cannot be accessed before their declaration.
+Function Declarations are fully hoisted and can be called before their definition.
+Function Expressions and Arrow Functions follow variable hoisting rules based on the keyword (var, let, or const).

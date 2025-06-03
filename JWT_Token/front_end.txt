@@ -1,0 +1,66 @@
+import React, { useState } from "react";
+
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Call the API for authentication
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+    if (data.token) {
+      // Save the token in localStorage or a cookie
+      localStorage.setItem("jwtToken", data.token);
+      alert("Login successful!");
+    } else {
+      alert("Login failed!");
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button type="submit">Login</button>
+    </form>
+  );
+};
+
+export default Login;
+
+//Creating the protected routes
+
+const fetchProtectedData = async () => {
+  const token = localStorage.getItem("jwtToken");
+
+  const response = await fetch("/api/protected", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, // Attach JWT token
+    },
+  });
+
+  const data = await response.json()
+  console.log(data);
+};

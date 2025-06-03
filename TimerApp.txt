@@ -1,0 +1,37 @@
+
+import { useEffect, useState } from 'react'
+import './App.css'
+
+function App() {
+const [number ,setNumber] = useState(0);
+const [isCounting,setIsCounting] = useState(false);
+useEffect(() =>{
+  let handler;
+  if(isCounting){
+    handler = setInterval(() => {
+      setNumber((prevNumber) => prevNumber + 1)
+    },1000)
+  }else{
+ clearInterval(handler)
+  }
+
+  return () => clearInterval(handler)
+})
+const startStop = () =>{
+  setIsCounting((prevIsCounting) => !prevIsCounting )
+}
+const handleReset =() => {
+  setIsCounting(false)
+  setNumber(0)
+}
+  return (
+    <>
+    <h3>Counter :{number}</h3>
+    <button onClick ={startStop}>{isCounting ? 'Pause' : 'Start'}</button>
+    <button onClick={handleReset}>Reset</button>
+
+    </>
+  )
+}
+
+export default App

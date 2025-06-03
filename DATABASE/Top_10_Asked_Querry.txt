@@ -1,0 +1,24 @@
+
+Complex SQL queries often test your ability to manipulate data across multiple tables, use subqueries, optimize queries, and solve real-world problems efficiently. Here are 10 complex SQL queries commonly asked during interviews, along with explanations.
+
+1. Find the Second Highest Salary
+This query tests your understanding of LIMIT, OFFSET, and subqueries.
+
+SELECT MAX(salary) 
+FROM employees 
+WHERE salary < (SELECT MAX(salary) FROM employees);
+Alternatively:
+
+
+SELECT salary 
+FROM employees 
+ORDER BY salary DESC 
+LIMIT 1 OFFSET 1;
+2. Find Employees Who Earn More Than Their Managers
+This query requires joining a table with itself.
+
+
+SELECT e.name AS Employee, m.name AS Manager
+FROM employees e
+JOIN employees m ON e.manager_id = m.id
+WHERE e.salary > m.salary;

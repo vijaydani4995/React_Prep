@@ -1,0 +1,152 @@
+📌 What is a .yml file in .github/workflows/?
+It's a GitHub Actions workflow file, written in YAML format, that tells GitHub what tasks to perform and when — like a script for building, testing, and deploying your code automatically.
+
+🔁 When and how is it triggered (invoked)?
+Step 1: You Push Code to GitHub
+You make changes to your local code and push it to the main branch (or another specified branch).
+
+This action triggers the GitHub Actions workflow as defined in the .yml file.
+
+yml
+Copy
+Edit
+on:
+  push:
+    branches: [main]
+✅ This block tells GitHub: “Run this workflow when code is pushed to the main branch.”
+
+⚙️ What happens during the GitHub Actions process?
+Step 2: GitHub reads .github/workflows/deploy.yml
+GitHub automatically looks for .yml files inside the .github/workflows/ directory.
+
+Example:
+
+kotlin
+Copy
+Edit
+my-project/
+├── client/
+├── server/
+└── .github/
+    └── workflows/
+        └── deploy.yml  ← GitHub Actions reads this
+🛠️ Step-by-step execution inside deploy.yml
+Here's a breakdown of what happens after the push:
+
+1. Job starts
+yml
+Copy
+Edit
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+This launches a virtual Ubuntu machine to run your steps.
+
+2. Check out code
+yml
+Copy
+Edit
+- name: Checkout Repository
+  uses: actions/checkout@v3
+GitHub copies your entire repo code into the virtual machine.
+
+3. Set up Node.js
+yml
+Copy
+Edit
+- name: Setup Node
+  uses: actions/setup-node@v3
+  with:
+    node-version: 18
+Installs Node.js in the runner so it can build your React app and run the Node.js server logic.
+
+4. Build React App
+yml
+Copy
+Edit
+- name: Build React App
+  working-directory: client
+  run: |
+    npm install
+    npm run build
+Installs frontend dependencies and creates a production build in client/build.
+
+5. Archive and package app
+yml
+Copy
+Edit
+- name: Archive Production Build
+  run: |
+    mkdir -p deploy
+    cp -r client/build deploy/build
+    cp -r server deploy/server
+    tar -czf app.tar.gz -C deploy .
+Collects all build files and backend files into one archive (app.tar.gz).
+
+6. Send files to EC2
+yml
+Copy
+Edit
+- name: Copy Files to EC2
+  uses: appleboy/scp-action@v0.1.4
+  with:
+    host: ${{ secrets.EC2_HOST }}
+    username: ${{ secrets.EC2_USER }}
+    key: ${{ secrets.EC2_SSH_KEY }}
+    source: "app.tar.gz"
+    target: "~/"
+Uses secure copy protocol (SCP) to transfer the files to your EC2 instance.
+
+SSH credentials are provided using GitHub Secrets.
+
+7. Run on EC2 via SSH
+yml
+Copy
+Edit
+- name: Deploy on EC2 via SSH
+  uses: appleboy/ssh-action@v1.0.0
+  with:
+    host: ${{ secrets.EC2_HOST }}
+    username: ${{ secrets.EC2_USER }}
+    key: ${{ secrets.EC2_SSH_KEY }}
+    script: |
+      tar -xzf ~/app.tar.gz -C ~/app
+      cd ~/app
+      npm install --omit=dev
+      pm2 start server/server.js --name my-app
+Connects to the EC2 server via SSH and:
+
+Extracts files
+
+Installs server dependencies
+
+Starts your backend using pm2 (which keeps it alive)
+
+🔐 GitHub Secrets Used
+Secret Name	Description
+EC2_HOST	Public DNS or IP of your EC2
+EC2_USER	Usually ubuntu or ec2-user
+EC2_SSH_KEY	Private .pem file content (SSH access)
+
+You can define these in:
+GitHub Repo → Settings → Secrets → Actions
+
+🧠 Summary (Visual Flow)
+mermaid
+Copy
+Edit
+graph LR
+A[Push code to main branch] --> B[GitHub triggers deploy.yml]
+B --> C[Checkout repo code]
+C --> D[Setup Node.js]
+D --> E[Build React app]
+E --> F[Archive files]
+F --> G[Copy to EC2 via SCP]
+G --> H[SSH into EC2 and deploy]
+H --> I[App running via pm2]
+✅ After setup — what do you need to do?
+Just write code and push.
+
+GitHub Actions does the rest: build → transfer → deploy.
+
+You can watch the entire process live in GitHub → Actions tab.

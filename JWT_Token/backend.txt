@@ -1,0 +1,47 @@
+const jwt = require("jsonwebtoken");
+const express = require("express");
+const app = express();
+app.use(express.json());
+
+const SECRET_KEY = "your_secret_key";
+
+app.post("/api/login", (req, res) => {
+  const { email, password } = req.body;
+
+  // Replace this with your DB validation logic
+  if (email === "user@example.com" && password === "password123") {
+    const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: "1h" });
+    res.json({ token });
+  } else {
+    res.status(401).json({ message: "Invalid credentials" });
+  }
+});
+
+
+const authenticateJWT = (req, res, next) => {
+  const authHeader = req.headers.authorization
+
+  if (authHeader) {
+    const token = authHeader.split(" ")[1];
+
+    jwt.verify(token, SECRET_KEY, (err, user) => {
+      if (err) {
+        return res.sendStatus(403); // Forbidden
+      }
+      req.user = user; // Attach decoded token payload
+      next();
+    });
+  } else {
+    res.sendStatus(401); // Unauthorized
+  }
+};
+
+// Example protected route
+app.get("/api/protected", authenticateJWT, (req, res) => {
+  res.json({ message: "You have access to this protected resource!" });
+});
+
+app.listen(5000, () => console.log("Server running on port 5000"));
+
+
+
