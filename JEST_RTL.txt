@@ -1,0 +1,240 @@
+What is Jest and why do we use it?
+
+Answer: Jest is a JavaScript testing framework developed by Facebook, commonly used with React but not limited to it. It provides functions for writing unit, integration, and snapshot tests with zero configuration.
+
+What are the different types of tests you can write using Jest?
+
+Unit tests, Integration tests, Snapshot tests, Mocking/stub testing.
+
+How do you structure your test files in a project?
+
+Commonly in __tests__ folder or placing *.test.js / *.spec.js files alongside source files.
+
+✅ Mocking and Spying
+What is jest.mock() and how does it work?
+
+It mocks modules or files automatically, useful for isolating the unit under test.
+
+How do you mock a function or a module in Jest?
+
+Example:
+
+
+jest.mock('./api');
+import { fetchData } from './api';
+fetchData.mockResolvedValue({ data: 'Mocked Data' });
+What’s the difference between jest.fn() and jest.spyOn()?
+
+jest.fn() creates a new mock function, while jest.spyOn() tracks calls to an existing method (and can optionally mock it).
+
+How do you reset mocks between tests?
+
+Using jest.resetAllMocks() or jest.clearAllMocks() in beforeEach().
+
+✅ Testing Techniques
+How do you test async code using Jest?
+
+Using async/await with await expect(...), or returning promises:
+
+test('async test', async () => {
+  const data = await fetchData();
+  expect(data).toBeDefined();
+});
+How do you test timers or setTimeout in Jest?
+
+Use Jest timer mocks:
+
+
+jest.useFakeTimers();
+jest.advanceTimersByTime(1000);
+How do you test a React component with hooks like useEffect, useState, useContext using Jest?
+
+Combine Jest with React Testing Library (RTL) to test components' behavior:
+
+
+import { render, screen } from '@testing-library/react';
+✅ Snapshot Testing
+What is snapshot testing in Jest? How do you use it?
+
+Captures the rendered output of a React component and compares it against future runs:
+
+
+const { asFragment } = render(<MyComponent />);
+expect(asFragment()).toMatchSnapshot();
+What are some drawbacks of snapshot testing?
+
+Can be brittle and hard to maintain if used excessively. Developers may blindly accept changes.
+
+✅ React Testing Library Integration
+What is the role of @testing-library/react with Jest?
+
+RTL provides utilities to test UI behavior; Jest is the underlying test runner and assertion library.
+
+How do you simulate user interactions like clicking a button?
+
+Using userEvent or fireEvent:
+
+fireEvent.click(screen.getByText('Submit'));
+✅ Code Coverage
+How do you generate code coverage reports using Jest?
+
+Run tests with --coverage:
+
+bash
+
+jest --coverage
+
+✅ Advanced / Real-World Jest Interview Questions
+1. How do you test Redux-connected components or context-based components?
+🔹 Redux-connected components:
+Use <Provider> from react-redux to wrap the component in the test.
+
+js
+Copy
+Edit
+import { Provider } from 'react-redux';
+import { render, screen } from '@testing-library/react';
+import configureStore from 'redux-mock-store';
+import MyComponent from './MyComponent';
+
+const mockStore = configureStore([]);
+
+test('renders with Redux', () => {
+  const store = mockStore({ user: { name: 'John' } });
+
+  render(
+    <Provider store={store}>
+      <MyComponent />
+    </Provider>
+  );
+
+  expect(screen.getByText(/john/i)).toBeInTheDocument();
+});
+🔹 Context-based components:
+Wrap with your custom context provider:
+
+js
+Copy
+Edit
+import { MyContext } from './MyContext';
+
+render(
+  <MyContext.Provider value={{ isLoggedIn: true }}>
+    <MyComponent />
+  </MyContext.Provider>
+);
+2. How do you handle test failures due to network/API requests?
+You mock API requests using either jest.mock() or libraries like msw (Mock Service Worker) for better control.
+
+Example using jest.mock():
+js
+Copy
+Edit
+jest.mock('./api');
+import { fetchData } from './api';
+
+test('API returns mocked data', async () => {
+  fetchData.mockResolvedValue({ data: 'Mocked response' });
+
+  const response = await fetchData();
+  expect(response.data).toBe('Mocked response');
+});
+3. How do you ensure your test suite remains fast and maintainable?
+Use unit tests for logic-heavy functions.
+
+Keep integration tests minimal and essential.
+
+Use test IDs (data-testid) instead of fragile selectors.
+
+Use beforeEach() and afterEach() to clean up and reset mocks.
+
+Write descriptive test names and group related tests with describe().
+
+Avoid excessive use of snapshot tests for complex UIs.
+
+4. How do you test private or internal functions? Should you?
+You shouldn’t test private functions directly. Test the public interface that uses them.
+
+If necessary (for complex logic):
+
+Move the private function to a separate utility file and write unit tests for it.
+
+5. How do you test file uploads, drag-drop, or other browser APIs?
+File Upload:
+js
+Copy
+Edit
+import { render, screen, fireEvent } from '@testing-library/react';
+
+test('uploads a file', () => {
+  const file = new File(['dummy content'], 'example.png', { type: 'image/png' });
+  render(<FileUploader />);
+  
+  const input = screen.getByLabelText(/upload/i);
+  fireEvent.change(input, { target: { files: [file] } });
+
+  expect(screen.getByText('example.png')).toBeInTheDocument();
+});
+Drag and Drop:
+Simulate using fireEvent.dragStart and fireEvent.drop.
+
+✅ More Common Jest Interview Questions with Answers
+6. What is the difference between jest.resetAllMocks() and jest.clearAllMocks()?
+resetAllMocks(): Resets mock state and restores original implementation.
+
+clearAllMocks(): Only clears mock call history, does not restore implementation.
+
+7. How do you skip or only run a specific test in Jest?
+js
+Copy
+Edit
+test.skip('this test is skipped', () => {});
+test.only('only this test runs', () => {});
+8. How do you test if a function was called with the correct arguments?
+js
+Copy
+Edit
+const mockFn = jest.fn();
+mockFn('Hello', 123);
+
+expect(mockFn).toHaveBeenCalledWith('Hello', 123);
+9. How do you test error scenarios in async code?
+js
+Copy
+Edit
+test('throws error', async () => {
+  const fetchData = jest.fn().mockRejectedValue(new Error('Failed'));
+
+  await expect(fetchData()).rejects.toThrow('Failed');
+});
+10. How do you use parameterized tests in Jest?
+js
+Copy
+Edit
+test.each([
+  [1, 2, 3],
+  [2, 3, 5],
+])('adds %i + %i = %i', (a, b, expected) => {
+  expect(a + b).toBe(expected);
+});
+11. How do you test a component that conditionally renders elements?
+js
+Copy
+Edit
+test('renders message when logged in', () => {
+  render(<Welcome isLoggedIn={true} />);
+  expect(screen.getByText(/welcome/i)).toBeInTheDocument();
+});
+12. How do you test navigation or routing in React?
+Use MemoryRouter from react-router-dom.
+
+js
+Copy
+Edit
+import { MemoryRouter } from 'react-router-dom';
+
+render(
+  <MemoryRouter initialEntries={['/home']}>
+    <App />
+  </MemoryRouter>
+);
