@@ -191,9 +191,6 @@ Value: Paste the full XML content.
 💡 Folder Structure Reminder
 Make sure your folder looks like this for the workflow to work:
 
-pgsql
-Copy
-Edit
 /
 ├── client/
 │   ├── package.json
