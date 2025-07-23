@@ -74,13 +74,8 @@ var isPalindrome = function(s) {
 };
 console.log(isPalindrome("madam wew"))
 
-
-
-
-function checkAnagram(str1,str2){
-  
-  return str1.split('').sort().join('') === str2.split('').sort().join('')
-  
+function checkAnagram(str1,str2){ 
+  return str1.split('').sort().join('') === str2.split('').sort().join('') 
 }
 
 console.log(checkAnagram("listen","silent"))
@@ -100,7 +95,7 @@ var removeDuplicates = function(nums) {
         }
     }
     return num;
-};
+}}
 console.log(removeDuplicates([1,1,1,2,2,2]))
 
 

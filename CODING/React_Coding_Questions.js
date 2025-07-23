@@ -126,17 +126,16 @@ console.log(findLargest([10, 20, 30, 40])); // 40
 12. Flatten a Nested Array
 
 function flattenArray(arr) {
-  let flatArr = [];
+  let flatArr = []
   arr.forEach((item) => {
     if (Array.isArray(item)) {
-      flatArr = flatArr.concat(flattenArray(item));
+      flatArr = flatArr.concat(flattenArray(item))
     } else {
       flatArr.push(item);
     }
-  });
+  })
   return flatArr;
 }
-
 // Example:
 console.log(flattenArray([1, [2, [3, 4], 5], [6, 7], 8])); // [1, 2, 3, 4, 5, 6, 7, 8]
 13. Find the Maximum Sum of a Subarray (Kadane's Algorithm)
@@ -145,8 +144,8 @@ function maxSubArraySum(arr) {
   let maxSum = arr[0];
   let currentSum = arr[0];
   for (let i = 1; i < arr.length; i++) {
-    currentSum = Math.max(arr[i], currentSum + arr[i]);
-    maxSum = Math.max(maxSum, currentSum);
+    currentSum = Math.max(arr[i], currentSum + arr[i])
+    maxSum = Math.max(maxSum, currentSum)
   }
   return maxSum;
 }
@@ -233,7 +232,7 @@ console.log(mergeIntervals([[1, 3], [2, 6], [8, 10], [15, 18]])); // [[1, 6], [8
 function mostFrequentElement(arr) {
   let map = new Map();
   let maxFreq = 0;
-  let maxElement = null;
+  let maxElement = null
 
   for (let num of arr) {
     let freq = map.get(num) || 0;
@@ -528,7 +527,7 @@ let arr = [
     { name: "vijay", age: 23 }
 ];
 
-const uniqueMap = new Map();
+const uniqueMap = new Map()
 
 arr.forEach(obj => {
     const key = `${obj.name}-${obj.age}`;
@@ -539,6 +538,39 @@ arr.forEach(obj => {
 
 const uniqueArray = Array.from(uniqueMap.values());
 console.log(uniqueArray);
+
+
+let arr = [
+    { name: "vijay", age: 23 },
+    { name: "Ajya", age: 24 },
+    { name: "vijay", age: 23 }
+];
+
+const countMap = new Map();
+
+arr.forEach(obj => {
+    const key = `${obj.name}-${obj.age}`;
+    if (!countMap.has(key)) {
+        countMap.set(key, { count: 1, obj });
+    } else {
+        countMap.get(key).count++;
+    }
+});
+
+const duplicates = [];
+
+countMap.forEach(({ count, obj }) => {
+    if (count > 1) {
+        duplicates.push(obj);
+    }
+});
+
+console.log(duplicates);
+
+
+
+
+
 
 
 const arr = [
@@ -556,6 +588,63 @@ const grouped = arr.reduce((acc,cur) => {
     return acc
 },{})
 console.log(grouped)
+
+
+
+const input = {
+  a: 1,
+  b: {
+    c: 2,
+    d: {
+      e: 3
+    }
+  },
+  f: 4
+};
+
+function FlattenObject(obj, parentKey = "",result = {}){
+    
+    for(let key in obj){
+        const fullKey = parentKey ? `${parentKey}.${key}` : key
+        if(typeof obj[key] === "object" && !Array.isArray(obj[key]) && obj[key] !== null){
+            FlattenObject(obj[key],fullKey,result)
+        }else{
+            result[fullKey] = obj[key]
+        }
+    }
+    return result
+    
+}
+console.log(FlattenObject(input))
+
+
+Identify the duplicaticate elements and unique elements in array
+
+
+let arr = [1, 2, 3, 2, 4, 1, 5];
+
+const countMap = new Map();
+const duplicates = [];
+const uniques = [];
+
+// Count frequency
+arr.forEach(num => {
+    countMap.set(num, (countMap.get(num) || 0) + 1);
+});
+
+// Separate duplicates and uniques
+arr.forEach(num => {
+    if (countMap.get(num) > 1) {
+        if (!duplicates.includes(num)) {
+            duplicates.push(num);
+        }
+    } else {
+        uniques.push(num);
+    }
+});
+
+console.log("Original array with only unique values:", uniques);
+console.log("Repeated elements moved to new array:", duplicates);
 
 
 

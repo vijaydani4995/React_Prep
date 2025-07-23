@@ -20,7 +20,7 @@ const nums = [1, 2, 3, 4];
 const multiplyThree = nums.myMap((num, i, arr) => {
     return num * 3;
 });
-console.log(multiplyThree);
+console.log(multiplyThree)
 
 2. Polyfill for Array.prototype.filter
 The .filter() method creates a new array with all elements that pass the test implemented by the provided function.
@@ -192,3 +192,38 @@ promise
     .catch((err) => {
         console.log(err);
     });
+
+
+
+function promiseAll(promises) {
+  return new Promise((resolve, reject) => {
+    const results = [];
+    let completed = 0;
+
+    promises.forEach((p, index) => {
+      Promise.resolve(p) // In case it's not a real promise
+        .then(result => {
+          results[index] = result;
+          completed++;
+          if (completed === promises.length) {
+            resolve(results);
+          }
+        })
+        .catch(err => reject(err));
+    });
+
+    if (promises.length === 0) {
+      resolve([]); // Handle empty input
+    }
+  });
+}
+
+const p1 = Promise.resolve(1);
+const p2 = Promise.resolve(2);
+const p3 = Promise.resolve(3);
+
+promiseAll([p1, p2, p3])
+  .then(results => console.log(results)) // [1, 2, 3]
+  .catch(err => console.error(err));
+
+

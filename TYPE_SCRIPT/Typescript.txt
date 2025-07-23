@@ -47,6 +47,7 @@ enum Direction {
 Use enums when you have a fixed set of related constants.
 
 **7. What are type assertions in TypeScript? How are they different from type casting?**
+
 Type assertions tell the compiler to treat a variable as a specific type without actual data conversion.
 
 ```ts

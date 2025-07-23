@@ -95,9 +95,7 @@ A fast, unopinionated web framework for Node.js to build APIs and web apps.
 
 How do you define routes in Express.js?
 
-js
-Copy
-Edit
+
 app.get('/users', (req, res) => { res.send('User List'); });
 What is the use of body-parser?
 

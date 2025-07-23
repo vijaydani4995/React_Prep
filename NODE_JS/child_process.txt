@@ -1,4 +1,7 @@
-In Node.js, the child_process module enables the creation of child processes to perform operations or execute programs outside of the main Node.js process. This is particularly useful for running shell commands, executing other scripts, or spawning multiple processes to perform tasks concurrently. By offloading work to child processes, you can improve performance or maintain separation between processes.
+In Node.js, the child_process module enables the creation of child processes to perform operations or execute
+ programs outside of the main Node.js process. This is particularly useful for running shell commands, 
+ executing other scripts, or spawning multiple processes to perform tasks concurrently. By offloading work
+ to child processes, you can improve performance or maintain separation between processes.
 
 Key Features of child_process
 Process Creation: Allows spawning new processes, enabling communication between the parent and child processes.
@@ -44,8 +47,7 @@ spawn()
 
 Spawns a new process, offering a stream-based interface for large outputs.
 Ideal for processes that generate a lot of output or require continuous input/output.
-javascript
-Copy code
+
 const { spawn } = require('child_process');
 
 const ls = spawn('ls', ['-lh']);

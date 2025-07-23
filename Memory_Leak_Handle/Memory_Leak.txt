@@ -28,10 +28,10 @@ useEffect(() => {
 useEffect(() => {
   const timer = setInterval(() => {
     console.log("Timer running");
-  }, 1000);
+  }, 1000)
 
   return () => clearInterval(timer); // 👈 Cleanup
-}, []);
+}, [])
 3. Unsubscribing from Event Listeners
 🧪 Scenario 3: DOM Event Listeners
 

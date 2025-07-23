@@ -2,8 +2,7 @@
 To run the nodemon
 
 1.why java script is loosely typed language - You don't have to tell that a string is a string,
- nor you can require a function to accepts an integer as its parameter.
-
+nor you can require a function to accepts an integer as its parameter.
 
 2.forEach()
 Purpose: Executes a function for each array element. It does not return a new array.
@@ -230,7 +229,7 @@ class MyComponent extends React.Component {
   render() {
     return (
       <button onClick={() => this.handleClick(1)}>Click me</button>
-    );
+    )
   }
 }
 Functional Components:
@@ -262,7 +261,7 @@ class MyComponent extends React.Component {
 // With arrow function
 class MyComponent extends React.Component {
   handleClick = () => {
-    console.log(this); // 'this' refers to the instance of MyComponent
+    console.log(this); 
   };
 
   render() {
@@ -328,12 +327,11 @@ An action is dispatched.
 The reducer processes the action and updates the store.
 The updated state is sent to the subscribers (e.g., React components), which re-render the UI.
 
-
 8.Router:
 React Router is a standard library for routing in React. It enables the navigation among views of various 
 components in a React Application, allows changing the browser URL, and keeps the UI in sync with the URL.
 Let us create a simple application to React to understand how the React Router works. The application will
- contain three components: home component, about a component, and contact component. We will use React 
+contain three components: home component, about a component, and contact component. We will use React 
 Router to navigate between these components.
 
 import React from 'react';
@@ -342,7 +340,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 // Define your components
 const Home = () => <h2>Home Page</h2>;
 const About = () => <h2>About Page</h2>;
-const Contact = () => <h2>Contact Page</h2>;
+const Contact = () => <h2>Contact Page</h2>
 
 const App = () => {
   return (
@@ -361,9 +359,7 @@ const App = () => {
               <Link to="/contact">Contact</Link>
             </li>
           </ul>
-        </nav>
-
-      
+        </nav>  
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -675,9 +671,6 @@ componentWillUnmount() Function: This function is invoked before the component i
 19.What is meant by Webpack
 Your project will bundle its own copy of react and react-dom with webpack, and ReactJS.NET will be used only for server-side rendering. Copy from the sample project to the root of your 
 project: package
-
-
-
 
 20.Diff b/w undefined, not defined and null
 undefined : var myvar;

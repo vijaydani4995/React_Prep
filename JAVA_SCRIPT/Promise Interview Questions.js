@@ -78,7 +78,7 @@ Example:
 fetchData
     .then((data) => console.log(data))
     .catch((error) => console.error(error))
-    .finally(() => console.log("Cleanup actions"));
+    .finally(() => console.log("Cleanup actions"))
 What is the Role of async/await with Promises?
 async/await is syntactic sugar over promises, making asynchronous code look synchronous. An async function returns a promise, and await pauses the function execution until the promise is resolved or rejected.
 

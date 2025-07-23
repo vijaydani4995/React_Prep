@@ -13,7 +13,6 @@ Let's walk through an example where we use fork() to create a child process to h
 1. Parent Process (main.js)
 This is the main process that will fork a child process to perform a task.
 
-
 // main.js
 const { fork } = require('child_process');
 

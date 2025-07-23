@@ -62,19 +62,20 @@ In this example:
 
 The dog object inherits from the animal object using Object.create(animal).
 The dog object has its own property barks but can still access animal's properties and methods.
+
 Key Points
 Prototype Chain: When accessing a property, JavaScript looks up the prototype chain until it finds the property or reaches null.
 Inheritance Methods:
 Using constructors with prototype.
 Using Object.create(parentObj) for direct inheritance.
+
 Benefits:
+
 Code reusability: Methods and properties can be shared across objects.
 Dynamic: Prototypes can be updated, and changes will reflect in all instances.
 Modern Approach: Classes
 With ES6, class syntax provides a cleaner way to use prototypes and inheritance:
 
-javascript
-Copy code
 class Person {
     constructor(name, age) {
         this.name = name;
@@ -91,7 +92,6 @@ class Student extends Person {
         super(name, age); 
         this.grade = grade;
     }
-
     study() {
         console.log(`${this.name} is studying in grade ${this.grade}.`);
     }

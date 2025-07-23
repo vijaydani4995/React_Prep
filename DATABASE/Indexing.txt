@@ -1,0 +1,127 @@
+Sure! Here's a detailed explanation of the types of indexing in databases, including how each works, when to use them, and real-world use cases.
+
+🔍 What is Indexing?
+Indexing is a technique used in databases to optimize data retrieval speed. It creates a data structure (often B-tree or Hash) that helps the database find rows more efficiently without scanning the entire table.
+
+🧱 Types of Indexes
+1. Primary Index (Clustered Index)
+Automatically created on the primary key.
+
+In clustered indexes, the data rows are physically stored in the order of the index.
+
+Only one clustered index per table is allowed.
+
+✅ Example:
+sql
+Copy
+Edit
+CREATE TABLE employees (
+  emp_id INT PRIMARY KEY,
+  name VARCHAR(100),
+  salary INT
+);
+emp_id is the clustered index by default.
+
+🟢 Best for: Range queries, ordered data access.
+
+2. Secondary Index (Non-Clustered Index)
+Creates a separate structure from the table, which holds a pointer to the actual data row.
+
+A table can have multiple non-clustered indexes.
+
+✅ Example:
+sql
+Copy
+Edit
+CREATE INDEX idx_name ON employees(name);
+🟢 Best for: Lookups on non-primary key columns.
+
+3. Unique Index
+Ensures that the indexed column(s) contain only unique values.
+
+Prevents duplicate entries.
+
+✅ Example:
+sql
+Copy
+Edit
+CREATE UNIQUE INDEX idx_email ON users(email);
+🟢 Best for: Email, username, mobile number, etc.
+
+4. Composite Index (Multi-column Index)
+Index on multiple columns.
+
+Helps when queries filter on more than one column.
+
+✅ Example:
+sql
+Copy
+Edit
+CREATE INDEX idx_city_name ON users(city, name);
+🟢 Best for: Queries like WHERE city = 'Pune' AND name = 'Vijay'
+
+❗ Order matters: The index will work efficiently only if the query uses the leftmost column(s).
+
+5. Full-Text Index
+Used for searching large text fields.
+
+Supports MATCH() and AGAINST() queries in MySQL.
+
+✅ Example:
+sql
+Copy
+Edit
+CREATE FULLTEXT INDEX idx_description ON products(description);
+🟢 Best for: Product search, blog content, articles, etc.
+
+6. Spatial Index (GIS Index)
+Used for geospatial data (coordinates, polygons, etc.).
+
+Works with spatial data types (e.g., POINT, GEOMETRY).
+
+✅ Example:
+sql
+Copy
+Edit
+CREATE SPATIAL INDEX idx_location ON places(location);
+🟢 Best for: Location-based apps, maps, logistics.
+
+7. Bitmap Index (mostly in data warehouses)
+Uses bitmaps to represent the presence of values.
+
+Efficient for low-cardinality columns (e.g., gender, status).
+
+🟢 Best for: Analytics, OLAP systems (not commonly used in OLTP).
+
+8. Function-Based Index
+Index based on the result of a function or expression.
+
+Available in databases like Oracle and PostgreSQL.
+
+✅ Example (PostgreSQL):
+sql
+Copy
+Edit
+CREATE INDEX idx_lower_email ON users(LOWER(email));
+🟢 Best for: Case-insensitive searches, computed values.
+
+📊 Summary Table
+Index Type	Unique?	Use Case
+Primary Index	Yes	Primary key lookup
+Secondary Index	No	Fast lookup on other columns
+Unique Index	Yes	Prevent duplicates
+Composite Index	Optional	Multiple column filtering
+Full-Text Index	No	Text search
+Spatial Index	No	Location-based queries
+Bitmap Index	No	Low-cardinality columns
+Function-Based Index	Optional	Expression-based queries
+
+🔧 Tips for Efficient Indexing
+Don’t over-index: too many indexes slow down INSERT/UPDATE.
+
+Use EXPLAIN to check if index is used.
+
+Use composite indexes for multi-column filters.
+
+Index selective columns (ones that reduce search rows).
+

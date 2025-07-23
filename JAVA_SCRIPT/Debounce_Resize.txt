@@ -1,19 +1,95 @@
+function throttle(fn, limit) {
+  let lastCall = 0;
+  return function () {
+    const now = Date.now();
+    if (now - lastCall >= limit) {
+      lastCall = now;
+      fn();
+    }
+  };
+}
+
+function sayHello() {
+  console.log("Hello!", new Date().toLocaleTimeString());
+}
+
+const throttledHello = throttle(sayHello, 2000);
+
+// Simulate rapid clicks
+setInterval(() => {
+  throttledHello(); // Will log "Hello!" once every 2 seconds
+}, 500);
+
+✅ 1. Throttle
+🔸 Use Case: Limit how often a function can run while scrolling
+🔸 Concept: Run the function at most once every N milliseconds
+🔧 Example:
+
+function throttle(func, limit) {
+  let lastCall = 0;
+  return function (...args) {
+    const now = Date.now();
+    if (now - lastCall >= limit) {
+      lastCall = now;
+      func.apply(this, args);
+    }
+  };
+}
+
+// Usage
+const handleScroll = throttle(() => {
+  console.log("Scroll event at", new Date().toISOString());
+}, 1000);
+
+// Simulate scroll
+window.addEventListener("scroll", handleScroll);
+
+
+
+function debounce(fn, delay) {
+  let timeout;
+  return function () {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      fn();
+    }, delay);
+  };
+}
+
+function sayHello() {
+  console.log("Hello!", new Date().toLocaleTimeString());
+}
+
+const debouncedHello = debounce(sayHello, 2000);
+
+// Simulate rapid clicks
+setInterval(() => {
+  debouncedHello(); // Only runs 2s *after* the last call
+}, 500);
+
+// After stopping the rapid calls, "Hello!" will appear once after 2s
+
+
+✅ 2. Debounce
+🔸 Use Case: Limit API calls while typing in a search input
+🔸 Concept: Wait for N milliseconds after the last event before running the function.
+🔧 Example:
+
 function debounce(func, delay) {
-    let timer; // To store the timeout ID
-    return function (...args) {
-        const context = this; // Preserve the context
-        clearTimeout(timer); // Clear the previous timer
-        timer = setTimeout(() => {
-            func.apply(context, args); // Call the function with the correct context and arguments
-        }, delay);
-    };
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => func.apply(this, args), delay);
+  };
 }
 
-function handleResize() {
-    console.log("Resize event triggered! Width:", window.innerWidth);
-}
+// Usage
+const search = debounce((query) => {
+  console.log("Searching for:", query);
+}, 300);
 
-const debouncedResize = debounce(handleResize, 300);
+// Simulate typing
+search("R");
+search("Re");
+search("Red"); // Only this will be logged after 300ms
 
-// Add the debounced function as an event listener
-window.addEventListener("resize", debouncedResize);

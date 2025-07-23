@@ -3,7 +3,8 @@ Last Updated : 20 Aug, 2024
 JavaScript is a high-level, dynamically typed client-side scripting language. JavaScript adds functionality to static HTML pages. Like most other
  programming languages JavaScript allows supports the concept of deep copy and shallow copy. 
 
-Shallow Copy
+Shallow Copy:-
+
 A shallow copy occurs when you copy the reference of an object to a new variable. In this process, only the top-level properties are copied, while 
 nested objects or arrays still reference the original memory location. This means that if you change the nested properties in one object, those
  changes will reflect in the other because they share the same memory reference.
@@ -45,6 +46,7 @@ Hence, any change made to either of them changes the attributes for both. To ove
 from memory, the other one ceases to exist. In a way the two objects are interdependent.
 
 Deep Copy
+
 A deep copy, on the other hand, creates a completely independent copy of the object, including all nested objects or arrays. This ensures that 
 changes made to one object do not affect the other. Each object is stored in a separate memory location, making them entirely independent.
 
@@ -78,13 +80,12 @@ Explanation: Here the new object is created using the JSON.parse() and JSON.stri
 an argument and then transforms it into a JSON string. This JSON string is passed to the JSON.parse() method which then transforms it into a JavaScript object.
 
 
-To deep clone an array using a library, you can use Lodash, a popular JavaScript utility library. Here's how you can do it:
+To deep clone an array using a library, you can use Lodash, a popular JavaScript utility library. Here's how you can do it:-
 
 Using Lodash's cloneDeep Method
-javascript
-Copy code
+
 // Import Lodash
-const _ = require('lodash');
+const _ = require('lodash')
 
 // Original array
 const originalArray = [

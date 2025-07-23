@@ -34,9 +34,7 @@ my-project/
 Here's a breakdown of what happens after the push:
 
 1. Job starts
-yml
-Copy
-Edit
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -44,8 +42,7 @@ This launches a virtual Ubuntu machine to run your steps.
 
 2. Check out code
 yml
-Copy
-Edit
+
 - name: Checkout Repository
   uses: actions/checkout@v3
 GitHub copies your entire repo code into the virtual machine.
@@ -61,9 +58,7 @@ Edit
 Installs Node.js in the runner so it can build your React app and run the Node.js server logic.
 
 4. Build React App
-yml
-Copy
-Edit
+
 - name: Build React App
   working-directory: client
   run: |
@@ -150,3 +145,6 @@ Just write code and push.
 GitHub Actions does the rest: build → transfer → deploy.
 
 You can watch the entire process live in GitHub → Actions tab.
+
+
+

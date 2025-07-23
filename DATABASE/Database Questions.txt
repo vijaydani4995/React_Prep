@@ -117,8 +117,7 @@ What is a materialized view, and how is it different from a regular view?
 A materialized view stores the result set physically, improving query performance but requiring manual refresh. A regular view is a virtual table with no stored data.
 How do you create a view in your database system?
 
-sql
-Copy code
+
 CREATE VIEW EmployeeDepartments AS
 SELECT e.EmployeeName, d.DepartmentName
 FROM Employees e
@@ -128,8 +127,7 @@ Can a view contain an aggregate function?
 Yes.
 Follow-up: Can you give an example of a view that aggregates data?
 
-sql
-Copy code
+
 CREATE VIEW DepartmentSalarySummary AS
 SELECT DepartmentID, SUM(Salary) AS TotalSalary
 FROM Employees

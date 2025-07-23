@@ -2,8 +2,7 @@ Find top 5 employees with the highest salary in each department
 
 
 SELECT * FROM (
-    SELECT first_name, salary, department_id, 
-           ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rank
+    SELECT first_name, salary, department_id, ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rank
     FROM employees
 ) AS ranked_employees WHERE rank <= 5;
 
